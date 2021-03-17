@@ -1,0 +1,56 @@
+package com.seidlserver.controller;
+
+import com.seidlserver.db.DBAccess;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.sql.SQLException;
+
+/*
+    Created by: Jonas Seidl
+    Date: 17.03.2021
+    Time: 18:13
+*/
+@RestController
+public class AuthenticationController {
+
+    @PostMapping("/register")
+    public String register(
+            @RequestParam(name="username", defaultValue = "") String username,
+            @RequestParam(name="first_name", defaultValue = "") String first_name,
+            @RequestParam(name="last_name", defaultValue = "") String last_name,
+            @RequestParam(name="email", defaultValue = "") String email,
+            @RequestParam(name="password", defaultValue = "") String password
+    ){
+        if(!(username.equals("") || first_name.equals("") || last_name.equals("") || email.equals("") || password.equals(""))){
+            try{
+                DBAccess dba = DBAccess.getInstance();
+                dba.register(username, first_name, last_name, email, password);
+                return "successfully registered";
+            }catch (SQLException ex){
+                return ex.toString();
+            }
+        }
+        return "Missing arguments";
+    }
+
+    @GetMapping("/login")
+    public String login(
+            @RequestParam(name="email", defaultValue = "") String email,
+            @RequestParam(name="password", defaultValue = "") String password)
+    {
+        if(!(email.equals("") || password.equals(""))){
+            try{
+                DBAccess dba = DBAccess.getInstance();
+                return dba.login(email, password)+"";
+            }catch (SQLException ex){
+                return ex.toString();
+            }
+        }
+        return false+"";
+    }
+}
