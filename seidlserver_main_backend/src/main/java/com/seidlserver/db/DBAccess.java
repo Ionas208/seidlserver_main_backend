@@ -27,22 +27,20 @@ public class DBAccess {
     }
 
     public void register(
-            String username,
             String first_name,
             String last_name,
             String email,
             String password
     ) throws SQLException {
 
-        String sql = "INSERT INTO users(username, first_name, last_name, email, password) VALUES (?, ?, ?, ?, ?);";
+        String sql = "INSERT INTO users (first_name, last_name, email, password) VALUES (?, ?, ?, ?);";
 
         PreparedStatement ps = db.getPreparedStatement(sql);
 
-        ps.setString(1, username);
-        ps.setString(2, first_name);
-        ps.setString(3, last_name);
-        ps.setString(4, email);
-        ps.setString(5, password);
+        ps.setString(1, first_name);
+        ps.setString(2, last_name);
+        ps.setString(3, email);
+        ps.setString(4, password);
 
         ps.execute();
     }

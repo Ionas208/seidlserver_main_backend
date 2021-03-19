@@ -8,10 +8,10 @@ import java.sql.*;
     Time: 18:49
 */
 public class DB {
-    private String db_url = "jdbc:postgresql://localhost:5432/seidlserverdb";
+    private String db_url = "jdbc:postgresql://seidlserver.ddns.net:5432/seidlserverdb";
     private String db_driver = "org.postgresql.Driver";
-    private String db_username = "postgres";
-    private String db_password = "postgres";
+    private String db_username = "seidlserver";
+    private String db_password = "seidlserver";
     private Connection connection;
 
     public DB() throws SQLException {
