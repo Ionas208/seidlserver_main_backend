@@ -3,10 +3,7 @@ package com.seidlserver.controller;
 import com.seidlserver.db.DBAccess;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.sql.SQLException;
 
@@ -16,6 +13,7 @@ import java.sql.SQLException;
     Time: 18:13
 */
 @RestController
+@CrossOrigin
 public class AuthenticationController {
 
     @PostMapping("/register")

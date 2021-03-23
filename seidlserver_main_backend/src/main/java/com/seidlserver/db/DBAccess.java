@@ -1,9 +1,13 @@
 package com.seidlserver.db;
 
+import com.seidlserver.beans.Gameserver;
+
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 
 /*
     Created by: Jonas Seidl
@@ -60,5 +64,21 @@ public class DBAccess {
         }else{
             return false;
         }
+    }
+
+    public List<Gameserver> getGameservers() throws SQLException {
+        String sql = "SELECT * FROM gameserver g INNER JOIN gameservertype gt ON g.type = gt.name;";
+        Statement s = db.getStatement();
+        ResultSet rs = s.executeQuery(sql);
+
+        List<Gameserver> gameservers = new ArrayList<>();
+        while(rs.next()){
+            int id = rs.getInt("id");
+            String name = rs.getString("name");
+            String url = rs.getString("url");
+            Gameserver g = new Gameserver(id, name, url);
+            gameservers.add(g);
+        }
+        return gameservers;
     }
 }

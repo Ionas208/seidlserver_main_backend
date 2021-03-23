@@ -1,6 +1,7 @@
 package com.seidlserver.controller;
 
 import com.seidlserver.wol.WakeOnLan;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
     Time: 17:51
 */
 @RestController
+@CrossOrigin
 public class WOLController {
     @PostMapping("/wake")
     public String wake(){
