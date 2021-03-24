@@ -13,7 +13,6 @@ import java.sql.SQLException;
     Time: 18:13
 */
 @RestController
-@CrossOrigin
 public class AuthenticationController {
 
     @PostMapping("/register")

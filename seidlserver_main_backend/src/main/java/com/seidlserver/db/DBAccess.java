@@ -1,6 +1,11 @@
 package com.seidlserver.db;
 
 import com.seidlserver.beans.Gameserver;
+import com.seidlserver.controller.MainController;
+import com.sun.tools.javac.Main;
+import org.springframework.beans.factory.BeanFactory;
+import org.springframework.context.annotation.Bean;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -36,7 +41,6 @@ public class DBAccess {
             String email,
             String password
     ) throws SQLException {
-
         String sql = "INSERT INTO users (first_name, last_name, email, password) VALUES (?, ?, ?, ?);";
 
         PreparedStatement ps = db.getPreparedStatement(sql);
@@ -76,7 +80,8 @@ public class DBAccess {
             int id = rs.getInt("id");
             String name = rs.getString("name");
             String url = rs.getString("url");
-            Gameserver g = new Gameserver(id, name, url);
+            String script = rs.getString("script");
+            Gameserver g = new Gameserver(id, name, url, script);
             gameservers.add(g);
         }
         return gameservers;
