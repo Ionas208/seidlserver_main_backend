@@ -12,8 +12,6 @@
             org.postgresql.Driver
         </property>
 
-        <!-- Assume test is the database name -->
-
         <property name = "hibernate.connection.url">
             jdbc:postgresql://seidlserver.ddns.net:5432/seidlserverdb
         </property>
@@ -25,9 +23,5 @@
         <property name = "hibernate.connection.password">
             seidlserver
         </property>
-
-        <!-- List of XML mapping files -->
-        <mapping resource = "Employee.hbm.xml"/>
-
     </session-factory>
 </hibernate-configuration>
