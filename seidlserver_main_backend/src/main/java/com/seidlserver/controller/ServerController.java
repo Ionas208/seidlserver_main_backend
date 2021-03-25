@@ -1,11 +1,7 @@
 package com.seidlserver.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.seidlserver.beans.State;
-import com.seidlserver.beans.StateType;
-import org.springframework.http.HttpStatus;
+import com.seidlserver.pojos.State;
+import com.seidlserver.pojos.StateType;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -19,7 +15,6 @@ import org.springframework.web.bind.annotation.RestController;
     Time: 09:54
 */
 @RestController
-@CrossOrigin
 public class ServerController {
 
     public State state = new State(StateType.DOWN);

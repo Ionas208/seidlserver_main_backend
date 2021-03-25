@@ -1,8 +1,10 @@
-package com.seidlserver.beans;
+package com.seidlserver.pojos;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import javax.persistence.*;
 
 /*
     Created by: Jonas Seidl
@@ -12,9 +14,27 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Entity
+@Table(name="GAMESERVER")
 public class Gameserver {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name="id")
     public int id;
-    public String name;
-    public String url;
+
+    @Column(name="script")
     public String script;
+
+    @Column(name="servername")
+    public String servername;
+
+    @ManyToOne
+    @JoinColumn(name = "type")
+    private GameserverType type;
+
+    public Gameserver(String script, String servername, GameserverType type) {
+        this.script = script;
+        this.servername = servername;
+        this.type = type;
+    }
 }

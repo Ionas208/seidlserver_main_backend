@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RestController;
     Time: 17:51
 */
 @RestController
-@CrossOrigin
 public class WOLController {
     @PostMapping("/wake")
     public String wake(){

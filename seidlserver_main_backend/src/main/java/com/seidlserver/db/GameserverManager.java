@@ -1,34 +1,34 @@
 package com.seidlserver.db;
 
-import com.seidlserver.pojos.User;
+import com.seidlserver.pojos.Gameserver;
+import com.seidlserver.pojos.GameserverType;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /*
     Created by: Jonas Seidl
     Date: 25.03.2021
-    Time: 18:21
+    Time: 21:08
 */
-public class UserManager {
+public class GameserverManager {
     private static SessionFactory factory;
 
-    public UserManager(){
+    public GameserverManager(){
         factory = new Configuration().configure().buildSessionFactory();
     }
 
-    public List<User> getUsers(){
+    public List<Gameserver> getGameservers(){
         Session session = factory.openSession();
         Transaction tx = null;
-        List<User> users = null;
+        List<Gameserver> servers = null;
         try{
             tx = session.beginTransaction();
-            users = session.createQuery("SELECT u FROM User u").list();
+            servers = session.createQuery("SELECT g FROM Gameserver g").list();
             tx.commit();
 
         }catch(HibernateException ex){
@@ -39,17 +39,18 @@ public class UserManager {
         } finally{
             session.close();
         }
-        return users;
+        return servers;
     }
 
-    public Integer addUser(String first_name, String last_name, String email, String password){
+    public Integer addGameserver(String script, String servername, String type){
         Session session = factory.openSession();
         Transaction tx = null;
         Integer id = null;
         try{
             tx = session.beginTransaction();
-            User u = new User(first_name, last_name, email, password);
-            id = (Integer) session.save(u);
+            GameserverType gt = session.get(GameserverType.class, type);
+            Gameserver g = new Gameserver(script, servername, gt);
+            id = (Integer)session.save(g);
             tx.commit();
 
         }catch(HibernateException ex){
@@ -63,13 +64,13 @@ public class UserManager {
         return id;
     }
 
-    public void removeUser(Integer id){
+    public void removeGameserver(Integer id){
         Session session = factory.openSession();
         Transaction tx = null;
         try{
             tx = session.beginTransaction();
-            User u = session.get(User.class, id);
-            session.remove(u);
+            Gameserver g = session.get(Gameserver.class, id);
+            session.remove(g);
             tx.commit();
 
         }catch(HibernateException ex){
@@ -80,11 +81,5 @@ public class UserManager {
         } finally{
             session.close();
         }
-    }
-
-    public static void main(String[] args) {
-        UserManager m = new UserManager();
-        Integer id = m.addUser("Hans", "Franz", "lmao", "lol");
-        System.out.println(id);
     }
 }

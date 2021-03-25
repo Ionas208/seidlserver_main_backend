@@ -23,5 +23,9 @@
         <property name = "hibernate.connection.password">
             seidlserver
         </property>
+
+        <mapping class="com.seidlserver.pojos.User"/>
+        <mapping class="com.seidlserver.pojos.Gameserver"/>
+        <mapping class="com.seidlserver.pojos.GameserverType"/>
     </session-factory>
 </hibernate-configuration>
