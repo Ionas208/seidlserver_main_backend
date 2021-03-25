@@ -4,6 +4,8 @@ import com.seidlserver.beans.Gameserver;
 import com.seidlserver.controller.MainController;
 import com.sun.tools.javac.Main;
 import org.springframework.beans.factory.BeanFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
@@ -23,6 +25,9 @@ public class DBAccess {
 
     private DB db;
     private static DBAccess instance;
+
+    @Autowired
+    private ApplicationContext context;
 
     public static DBAccess getInstance() throws SQLException {
         if(instance==null){
@@ -45,10 +50,12 @@ public class DBAccess {
 
         PreparedStatement ps = db.getPreparedStatement(sql);
 
+        BCryptPasswordEncoder encoder = (BCryptPasswordEncoder) context.getBean("bCryptPasswordEncoder");
+
         ps.setString(1, first_name);
         ps.setString(2, last_name);
         ps.setString(3, email);
-        ps.setString(4, password);
+        ps.setString(4, encoder.encode(password));
 
         ps.execute();
     }

@@ -18,9 +18,4 @@ public class MainController {
     public static void main(String[] args) {
         SpringApplication.run(MainController.class, args);
     }
-
-    @Bean
-    public BCryptPasswordEncoder bCryptPasswordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
 }
