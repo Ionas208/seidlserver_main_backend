@@ -32,9 +32,14 @@ public class Gameserver {
     @JoinColumn(name = "type")
     private GameserverType type;
 
-    public Gameserver(String script, String servername, GameserverType type) {
+    @ManyToOne
+    @JoinColumn(name = "userid")
+    private User user;
+
+    public Gameserver(String script, String servername, GameserverType type, User user) {
         this.script = script;
         this.servername = servername;
         this.type = type;
+        this.user = user;
     }
 }

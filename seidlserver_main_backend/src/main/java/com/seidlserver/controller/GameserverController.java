@@ -20,20 +20,25 @@ public class GameserverController {
     private GameserverManager gm = new GameserverManager();
 
     @GetMapping(value = "/list", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<Gameserver>> list(){
-        System.out.println("HEREEEEEEEEEEEEEE");
-        List<Gameserver> servers = gm.getGameservers();
-        return ResponseEntity.ok(servers);
+    public ResponseEntity<List<Gameserver>> list(
+            @RequestParam(name = "userid", defaultValue = "-1") Integer userid
+    ){
+        if(!userid.equals(-1)){
+            List<Gameserver> servers = gm.getGameserversForUser(userid);
+            return ResponseEntity.ok(servers);
+        }
+        return ResponseEntity.badRequest().build();
     }
 
     @PostMapping(value = "/add", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity add(
             @RequestParam(name = "servername", defaultValue = "") String servername,
             @RequestParam(name = "script", defaultValue = "") String script,
-            @RequestParam(name = "type", defaultValue = "") String type
+            @RequestParam(name = "type", defaultValue = "") String type,
+            @RequestParam(name = "userid", defaultValue = "-1") Integer userid
     ){
-        if(!(servername.equals("") || script.equals("") || type.equals(""))){
-            gm.addGameserver(servername, script, type);
+        if(!(servername.equals("") || script.equals("") || type.equals("") || userid.equals(-1))){
+            gm.addGameserver(servername, script, type, userid);
             return ResponseEntity.ok().build();
         }else{
             return ResponseEntity.badRequest().build();

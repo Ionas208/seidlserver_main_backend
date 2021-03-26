@@ -4,10 +4,7 @@ import com.seidlserver.pojos.State;
 import com.seidlserver.pojos.StateType;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /*
     Created by: Jonas Seidl
@@ -15,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
     Time: 09:54
 */
 @RestController
+@RequestMapping("server")
 public class ServerController {
 
     public State state = new State(StateType.DOWN);

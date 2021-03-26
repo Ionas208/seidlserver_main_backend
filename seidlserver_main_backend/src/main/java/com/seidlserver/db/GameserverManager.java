@@ -2,11 +2,13 @@ package com.seidlserver.db;
 
 import com.seidlserver.pojos.Gameserver;
 import com.seidlserver.pojos.GameserverType;
+import com.seidlserver.pojos.User;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
+import org.hibernate.query.Query;
 
 import java.util.List;
 
@@ -42,14 +44,38 @@ public class GameserverManager {
         return servers;
     }
 
-    public Integer addGameserver(String script, String servername, String type){
+    public List<Gameserver> getGameserversForUser(Integer userid){
+        Session session = factory.openSession();
+        Transaction tx = null;
+        List<Gameserver> servers = null;
+        try{
+            tx = session.beginTransaction();
+            User u = session.get(User.class, userid);
+            Query q = session.createQuery("SELECT g FROM Gameserver g WHERE g.user = :u");
+            q.setParameter("u", u);
+            servers = q.list();
+            tx.commit();
+
+        }catch(HibernateException ex){
+            ex.printStackTrace();
+            if(tx!=null){
+                tx.rollback();
+            }
+        } finally{
+            session.close();
+        }
+        return servers;
+    }
+
+    public Integer addGameserver(String script, String servername, String type, Integer userid){
         Session session = factory.openSession();
         Transaction tx = null;
         Integer id = null;
         try{
             tx = session.beginTransaction();
             GameserverType gt = session.get(GameserverType.class, type);
-            Gameserver g = new Gameserver(script, servername, gt);
+            User u = session.get(User.class, userid);
+            Gameserver g = new Gameserver(script, servername, gt, u);
             id = (Integer)session.save(g);
             tx.commit();
 
