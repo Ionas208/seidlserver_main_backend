@@ -1,4 +1,4 @@
-package com.seidlserver.pojos;
+package com.seidlserver.pojos.state;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

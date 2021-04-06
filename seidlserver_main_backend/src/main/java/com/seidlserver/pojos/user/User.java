@@ -1,4 +1,4 @@
-package com.seidlserver.pojos;
+package com.seidlserver.pojos.user;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

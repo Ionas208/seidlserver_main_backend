@@ -24,8 +24,8 @@
             seidlserver
         </property>
 
-        <mapping class="com.seidlserver.pojos.User"/>
-        <mapping class="com.seidlserver.pojos.Gameserver"/>
-        <mapping class="com.seidlserver.pojos.GameserverType"/>
+        <mapping class="com.seidlserver.pojos.user.User"/>
+        <mapping class="com.seidlserver.pojos.gameserver.Gameserver"/>
+        <mapping class="com.seidlserver.pojos.gameserver.GameserverType"/>
     </session-factory>
 </hibernate-configuration>

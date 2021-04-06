@@ -1,8 +1,8 @@
 package com.seidlserver.db;
 
-import com.seidlserver.pojos.Gameserver;
-import com.seidlserver.pojos.GameserverType;
-import com.seidlserver.pojos.User;
+import com.seidlserver.pojos.gameserver.Gameserver;
+import com.seidlserver.pojos.gameserver.GameserverType;
+import com.seidlserver.pojos.user.User;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;

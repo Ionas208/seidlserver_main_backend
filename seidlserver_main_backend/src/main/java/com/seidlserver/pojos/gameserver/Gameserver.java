@@ -1,5 +1,6 @@
-package com.seidlserver.pojos;
+package com.seidlserver.pojos.gameserver;
 
+import com.seidlserver.pojos.user.User;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

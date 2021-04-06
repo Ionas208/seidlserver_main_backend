@@ -1,4 +1,4 @@
-package com.seidlserver.pojos;
+package com.seidlserver.pojos.state;
 
 /*
     Created by: Jonas Seidl

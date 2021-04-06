@@ -1,6 +1,6 @@
 package com.seidlserver.user;
 
-import com.seidlserver.pojos.User;
+import com.seidlserver.pojos.user.User;
 import org.springframework.data.repository.CrudRepository;
 
 /*

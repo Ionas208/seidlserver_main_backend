@@ -1,7 +1,7 @@
 package com.seidlserver.controller;
 
-import com.seidlserver.pojos.State;
-import com.seidlserver.pojos.StateType;
+import com.seidlserver.pojos.state.State;
+import com.seidlserver.pojos.state.StateType;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
