@@ -17,7 +17,16 @@ import java.util.List;
 public class UserManager {
     private static SessionFactory factory;
 
-    public UserManager(){
+    private static UserManager instance;
+
+    public static UserManager getInstance(){
+        if(instance == null){
+            instance = new UserManager();
+        }
+        return instance;
+    }
+
+    private UserManager(){
         factory = new Configuration().configure().buildSessionFactory();
     }
 
@@ -79,6 +88,11 @@ public class UserManager {
         } finally{
             session.close();
         }
+    }
+
+    public User getUserByEmail(String email){
+        List<User> users = getUsers();
+        return users.stream().filter(u -> !u.getEmail().equals(email)).findFirst().orElse(null);
     }
 
     public static void main(String[] args) {
