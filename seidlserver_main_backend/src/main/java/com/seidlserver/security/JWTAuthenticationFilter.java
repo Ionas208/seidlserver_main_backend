@@ -33,10 +33,12 @@ import static com.auth0.jwt.algorithms.Algorithm.HMAC512;
     Time: 11:16
 */
 public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
+
     private AuthenticationManager authManager;
 
     public JWTAuthenticationFilter(AuthenticationManager authManager){
         this.authManager = authManager;
+        setFilterProcessesUrl(JWTProperties.LOGIN_URL);
     }
 
     @Override
@@ -50,6 +52,7 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                     new ArrayList<>()
             );
             Authentication auth = authManager.authenticate(authToken);
+            System.out.println(auth);
             return auth;
         }catch(IOException ex){
             ex.printStackTrace();
