@@ -1,5 +1,7 @@
 package com.seidlserver.pojos.user;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.seidlserver.pojos.gameserver.Gameserver;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,6 +12,7 @@ import javax.persistence.*;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 /*
     Created by: Jonas Seidl
@@ -21,6 +24,7 @@ import java.util.Collection;
 @NoArgsConstructor
 @Entity
 @Table(name="USERS")
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class User implements UserDetails{
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="id")
@@ -36,6 +40,10 @@ public class User implements UserDetails{
 
     @Column(name="password")
     private String password;
+
+    @ManyToMany(targetEntity = Gameserver.class)
+    @JoinTable(name="USER_GAMESERVER", joinColumns = { @JoinColumn(name = "userid") }, inverseJoinColumns = { @JoinColumn(name = "gameserverid") })
+    private List<Gameserver> sharedGameservers;
 
     public User(String first_name, String last_name, String email, String password) {
         this.first_name = first_name;

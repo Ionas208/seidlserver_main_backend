@@ -92,12 +92,11 @@ public class UserManager {
 
     public User getUserByEmail(String email){
         List<User> users = getUsers();
-        return users.stream().filter(u -> !u.getEmail().equals(email)).findFirst().orElse(null);
-    }
-
-    public static void main(String[] args) {
-        UserManager m = new UserManager();
-        Integer id = m.addUser("Hans", "Franz", "lmao", "lol");
-        System.out.println(id);
+        for (User u: users) {
+            if(u.getEmail().equals(email)){
+                return u;
+            }
+        }
+        return null;
     }
 }

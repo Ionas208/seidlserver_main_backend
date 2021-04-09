@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.List;
 
 /*
     Created by: Jonas Seidl
@@ -36,6 +37,10 @@ public class Gameserver {
     @ManyToOne
     @JoinColumn(name = "userid")
     private User user;
+
+    @ManyToMany(targetEntity = User.class)
+    @JoinTable(name="USER_GAMESERVER", joinColumns = { @JoinColumn(name = "gameserverid") }, inverseJoinColumns = { @JoinColumn(name = "userid") })
+    private List<User> sharedUsers;
 
     public Gameserver(String script, String servername, GameserverType type, User user) {
         this.script = script;

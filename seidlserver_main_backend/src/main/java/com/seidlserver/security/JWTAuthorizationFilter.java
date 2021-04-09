@@ -17,6 +17,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 
 /*
     Created by: Jonas Seidl
@@ -55,7 +56,8 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
             if(username != null){
                 UserManager um = UserManager.getInstance();
                 User user = um.getUserByEmail(username);
-                UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(username, null, user.getAuthorities());
+                UsernamePasswordAuthenticationToken auth =
+                        new UsernamePasswordAuthenticationToken(user.getUsername(), null, user.getAuthorities());
                 return auth;
             }
             return null;

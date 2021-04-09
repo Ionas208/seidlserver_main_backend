@@ -20,7 +20,16 @@ import java.util.List;
 public class GameserverManager {
     private static SessionFactory factory;
 
-    public GameserverManager(){
+    private static GameserverManager instance;
+
+    public static GameserverManager getInstance(){
+        if(instance == null){
+            instance = new GameserverManager();
+        }
+        return instance;
+    }
+
+    private GameserverManager(){
         factory = new Configuration().configure().buildSessionFactory();
     }
 
@@ -88,6 +97,53 @@ public class GameserverManager {
             session.close();
         }
         return id;
+    }
+
+    public void shareGameserver(Integer gameserverid, Integer userid){
+        Session session = factory.openSession();
+        Transaction tx = null;
+        try{
+            tx = session.beginTransaction();
+
+            Gameserver g = session.get(Gameserver.class, gameserverid);
+            User u = session.get(User.class, userid);
+
+            g.getSharedUsers().add(u);
+
+            session.save(g);
+            tx.commit();
+
+        }catch(HibernateException ex){
+            ex.printStackTrace();
+            if(tx!=null){
+                tx.rollback();
+            }
+        } finally{
+            session.close();
+        }
+    }
+
+    public void unshareGameserver(Integer gameserverid, Integer userid){
+        Session session = factory.openSession();
+        Transaction tx = null;
+        try{
+            tx = session.beginTransaction();
+
+            Gameserver g = session.get(Gameserver.class, gameserverid);
+            User u = session.get(User.class, userid);
+
+            g.getSharedUsers().remove(u);
+            session.remove(g);
+            tx.commit();
+
+        }catch(HibernateException ex){
+            ex.printStackTrace();
+            if(tx!=null){
+                tx.rollback();
+            }
+        } finally{
+            session.close();
+        }
     }
 
     public void removeGameserver(Integer id){

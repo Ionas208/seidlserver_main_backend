@@ -13,4 +13,5 @@ public class SeidlserverApplication {
     public static void main(String[] args) {
         SpringApplication.run(SeidlserverApplication.class, args);
     }
+
 }

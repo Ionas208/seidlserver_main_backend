@@ -17,7 +17,7 @@ import java.util.List;
 @RequestMapping("gameserver")
 public class GameserverController {
 
-    private GameserverManager gm = new GameserverManager();
+    private GameserverManager gm = GameserverManager.getInstance();
 
     @GetMapping(value = "/list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<Gameserver>> list(
