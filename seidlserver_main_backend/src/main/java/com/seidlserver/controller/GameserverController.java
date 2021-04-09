@@ -45,6 +45,20 @@ public class GameserverController {
         }
     }
 
+    /*
+    @PostMapping(value = "/add", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity add(
+            @RequestBody Gameserver gs
+    ){
+        if(gs != null){
+            gm.addGameserver(gs.getServername(), gs.getScript(), gs.getType().getName(), gs.getUser().getId());
+            return ResponseEntity.ok().build();
+        }else{
+            return ResponseEntity.badRequest().build();
+        }
+    }
+    */
+
     @PostMapping(value = "/remove", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity add(
             @RequestParam(name = "id", defaultValue = "-1") Integer id

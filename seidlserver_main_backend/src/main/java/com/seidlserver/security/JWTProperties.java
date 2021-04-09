@@ -7,7 +7,7 @@ package com.seidlserver.security;
 */
 public class JWTProperties {
     public static final String SECRET = "LMAO";
-    public static final int EXPIRATION_TIME = 60*60*24;
+    public static final int EXPIRATION_TIME = 60*60*24*365;
     public static final String TOKEN_PREFIX = "Bearer ";
     public static final String HEADER_STRING = "Authorization";
     public static final String LOGIN_URL = "/auth/login";
