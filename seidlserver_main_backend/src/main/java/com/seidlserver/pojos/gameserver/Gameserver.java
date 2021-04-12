@@ -1,5 +1,6 @@
 package com.seidlserver.pojos.gameserver;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.seidlserver.pojos.user.User;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -38,6 +39,7 @@ public class Gameserver {
     @JoinColumn(name = "userid")
     private User user;
 
+    @JsonIgnore
     @ManyToMany(targetEntity = User.class)
     @JoinTable(name="USER_GAMESERVER", joinColumns = { @JoinColumn(name = "gameserverid") }, inverseJoinColumns = { @JoinColumn(name = "userid") })
     private List<User> sharedUsers;

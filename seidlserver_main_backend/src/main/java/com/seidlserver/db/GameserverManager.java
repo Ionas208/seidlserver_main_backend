@@ -33,7 +33,7 @@ public class GameserverManager {
         factory = new Configuration().configure().buildSessionFactory();
     }
 
-    public List<Gameserver> getGameservers(){
+    public List<Gameserver> getGameservers() throws HibernateException{
         Session session = factory.openSession();
         Transaction tx = null;
         List<Gameserver> servers = null;
@@ -47,22 +47,24 @@ public class GameserverManager {
             if(tx!=null){
                 tx.rollback();
             }
-        } finally{
             session.close();
+            throw ex;
         }
         return servers;
     }
 
-    public List<Gameserver> getGameserversForUser(Integer userid){
+    public List<Gameserver> getGameserversForUser(Integer userid) throws HibernateException{
         Session session = factory.openSession();
         Transaction tx = null;
         List<Gameserver> servers = null;
         try{
+            System.out.println("lmao");
             tx = session.beginTransaction();
             User u = session.get(User.class, userid);
             Query q = session.createQuery("SELECT g FROM Gameserver g WHERE g.user = :u");
             q.setParameter("u", u);
             servers = q.list();
+            servers.addAll(u.getSharedGameservers());
             tx.commit();
 
         }catch(HibernateException ex){
@@ -70,13 +72,13 @@ public class GameserverManager {
             if(tx!=null){
                 tx.rollback();
             }
-        } finally{
             session.close();
+            throw ex;
         }
         return servers;
     }
 
-    public Integer addGameserver(String script, String servername, String type, Integer userid){
+    public Integer addGameserver(String script, String servername, String type, Integer userid) throws HibernateException{
         Session session = factory.openSession();
         Transaction tx = null;
         Integer id = null;
@@ -93,23 +95,26 @@ public class GameserverManager {
             if(tx!=null){
                 tx.rollback();
             }
-        } finally{
             session.close();
+            throw ex;
         }
         return id;
     }
 
-    public void shareGameserver(Integer gameserverid, Integer userid){
+    public void shareGameserver(Integer gameserverid, Integer serverownerID, Integer recipientID) throws HibernateException{
         Session session = factory.openSession();
         Transaction tx = null;
         try{
             tx = session.beginTransaction();
 
             Gameserver g = session.get(Gameserver.class, gameserverid);
-            User u = session.get(User.class, userid);
+            User recipient = session.get(User.class, recipientID);
 
-            g.getSharedUsers().add(u);
-
+            if(g.getUser().getId() == serverownerID){
+                g.getSharedUsers().add(recipient);
+            }else{
+                throw new HibernateException("Attempting to share gameserver from different user");
+            }
             session.save(g);
             tx.commit();
 
@@ -118,12 +123,12 @@ public class GameserverManager {
             if(tx!=null){
                 tx.rollback();
             }
-        } finally{
             session.close();
+            throw ex;
         }
     }
 
-    public void unshareGameserver(Integer gameserverid, Integer userid){
+    public void unshareGameserver(Integer gameserverid, Integer userid) throws HibernateException{
         Session session = factory.openSession();
         Transaction tx = null;
         try{
@@ -141,12 +146,12 @@ public class GameserverManager {
             if(tx!=null){
                 tx.rollback();
             }
-        } finally{
             session.close();
+            throw ex;
         }
     }
 
-    public void removeGameserver(Integer id){
+    public void removeGameserver(Integer id) throws HibernateException{
         Session session = factory.openSession();
         Transaction tx = null;
         try{
@@ -160,8 +165,32 @@ public class GameserverManager {
             if(tx!=null){
                 tx.rollback();
             }
-        } finally{
             session.close();
+            throw ex;
+        }
+    }
+
+    public void removeGameserverFromUser(Integer id, Integer userid) throws HibernateException{
+        Session session = factory.openSession();
+        Transaction tx = null;
+        try{
+            tx = session.beginTransaction();
+            Gameserver g = session.get(Gameserver.class, id);
+            if(g.getUser().getId() == userid){
+                session.remove(g);
+                tx.commit();
+            }
+            else{
+                throw new HibernateException("Attempting to remove gameserver from different user");
+            }
+
+        }catch(HibernateException ex){
+            ex.printStackTrace();
+            if(tx!=null){
+                tx.rollback();
+            }
+            session.close();
+            throw ex;
         }
     }
 }

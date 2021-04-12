@@ -39,5 +39,4 @@ public class ServerController {
         state.setState(StateType.UP);
         return ResponseEntity.ok(state);
     }
-
 }
