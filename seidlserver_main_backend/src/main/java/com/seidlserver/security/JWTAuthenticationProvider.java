@@ -51,7 +51,6 @@ public class JWTAuthenticationProvider implements AuthenticationProvider {
         }
         else{
             token = null;
-            //token = new UsernamePasswordAuthenticationToken(name, password);
         }
         return token;
     }

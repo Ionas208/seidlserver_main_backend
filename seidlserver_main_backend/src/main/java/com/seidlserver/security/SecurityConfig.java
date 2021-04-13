@@ -51,6 +51,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeRequests()
                 .antMatchers(HttpMethod.POST, JWTProperties.REGISTER_URL).permitAll()
+                .antMatchers(HttpMethod.GET, "/stats/cpu").permitAll()
+                .antMatchers(HttpMethod.GET, "/stats/mem").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .addFilter(new JWTAuthenticationFilter(authenticationManager()))

@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.seidlserver.pojos.stat.CpuLoad;
 import com.seidlserver.pojos.stat.CpuStat;
 import com.seidlserver.pojos.stat.Host;
+import com.seidlserver.pojos.stat.MemStat;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,6 +29,7 @@ public class StatController {
     private String testJson = "{\"sysstat\": {\"hosts\": [{\"nodename\": \"Lenovo\",\"sysname\": \"Linux\",\"release\": \"4.4.0-19041-Microsoft\",\"machine\": \"x86_64\",\"number-of-cpus\": 12,\"date\": \"04/06/21\",\"statistics\": [ {\"timestamp\": \"10:05:36\",\"cpu-load\": [{\"cpu\": \"all\", \"usr\": 7.25, \"nice\": 0.00, \"sys\": 3.93, \"iowait\": 0.00, \"irq\": 0.12, \"soft\": 0.00, \"steal\": 0.00, \"guest\": 0.00, \"gnice\": 0.00, \"idle\": 88.70}]}] }    ]}}";
 
     private List<CpuStat> cpuStats = new ArrayList<>();
+    private List<MemStat> memStats = new ArrayList<>();
 
     @GetMapping(path = "/cpu", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<CpuStat>> cpu(){
@@ -38,6 +40,19 @@ public class StatController {
             cpuStats.add(new CpuStat(LocalDateTime.now(), load));
             return ResponseEntity.ok(cpuStats);
         } catch (JsonProcessingException e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+    @GetMapping(path = "/mem", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<MemStat>> mem(){
+        ObjectMapper om = new ObjectMapper();
+        try {
+            MemStat memStat = new MemStat(LocalDateTime.now(), 16.576244, 6.514484);
+            memStats.add(memStat);
+            return ResponseEntity.ok(memStats);
+        } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.badRequest().build();
         }
