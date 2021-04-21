@@ -26,7 +26,11 @@ public class AuthController {
         UserManager um = UserManager.getInstance();
         PasswordEncoder encoder = context.getBean("passwordEncoder", PasswordEncoder.class);
         String hash = encoder.encode(user.getPassword());
-        um.addUser(user.getFirst_name(), user.getLast_name(), user.getEmail(), hash);
-        return ResponseEntity.ok().build();
+        try{
+            um.addUser(user.getFirst_name(), user.getLast_name(), user.getEmail(), hash);
+            return ResponseEntity.ok().build();
+        }catch(Exception e){
+            return ResponseEntity.badRequest().build();
+        }
     }
 }
