@@ -6,6 +6,7 @@ import com.seidlserver.pojos.user.User;
 import com.seidlserver.util.ApplicationContextProvider;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.web.servlet.server.Session;
 import org.springframework.context.ApplicationContext;
 import org.springframework.core.log.LogMessage;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -24,6 +25,7 @@ import com.auth0.jwt.JWT;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -75,7 +77,10 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                 .withExpiresAt(new Date(System.currentTimeMillis() + JWTProperties.EXPIRATION_TIME))
                 .sign(HMAC512(JWTProperties.SECRET.getBytes()));
 
-        response.getWriter().write(token);
-        response.addHeader(JWTProperties.HEADER_STRING, JWTProperties.TOKEN_PREFIX + token);
+        Cookie c = new Cookie("jwt", token);
+        c.setHttpOnly(true);
+        response.addCookie(c);
+        //response.getWriter().write(token);
+        //response.addHeader(JWTProperties.HEADER_STRING, JWTProperties.TOKEN_PREFIX + token);
     }
 }
