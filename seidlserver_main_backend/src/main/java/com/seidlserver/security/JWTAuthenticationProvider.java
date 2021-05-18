@@ -36,14 +36,6 @@ public class JWTAuthenticationProvider implements AuthenticationProvider {
         ApplicationContext context = ApplicationContextProvider.getContext();
         PasswordEncoder encoder = context.getBean("passwordEncoder", PasswordEncoder.class);
 
-        /*System.out.println("-------------------------");
-        System.out.println("User from DB:" + user);
-        System.out.println("Name from Req: " + name);
-        System.out.println("Password from Req: " + password);
-        System.out.println("Hash from DB: " + hash);
-        System.out.println("Matches: " + encoder.matches(password, hash));
-        System.out.println("-------------------------");*/
-
         UsernamePasswordAuthenticationToken token;
 
         if(encoder.matches(password, hash)){
