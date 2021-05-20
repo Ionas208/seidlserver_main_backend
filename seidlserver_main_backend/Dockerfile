@@ -1,4 +1,4 @@
-FROM arm64v8/openjdk:17
+FROM hypriot/rpi-java
 ARG JAR_FILE=target/*.jar
 COPY ${JAR_FILE} backend.jar
 EXPOSE 80
