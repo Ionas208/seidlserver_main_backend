@@ -1,4 +1,4 @@
-package com.seidlserver.request;
+package com.seidlserver.network;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;

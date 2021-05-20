@@ -1,10 +1,15 @@
 package com.seidlserver.controller;
 
+import com.seidlserver.network.RequestHandler;
+import com.seidlserver.network.StateHandler;
 import com.seidlserver.pojos.state.State;
-import com.seidlserver.pojos.state.StateType;
+import com.seidlserver.wol.WakeOnLan;
+import org.apache.coyote.Request;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.net.MalformedURLException;
 
 /*
     Created by: Jonas Seidl
@@ -15,28 +20,42 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("server")
 public class ServerController {
 
-    public State state = new State(StateType.DOWN);
-
     @GetMapping(path = "/state", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<State> state(){
-        return ResponseEntity.ok(state);
+        return ResponseEntity.ok(StateHandler.getState());
     }
 
-    @PostMapping(path = "/start", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<State> start(){
-        state.setState(StateType.UP);
-        return ResponseEntity.ok(state);
+    @PostMapping("/start")
+    public ResponseEntity start(){
+        try{
+            WakeOnLan.wake();
+            return ResponseEntity.ok().build();
+        }catch(Exception ex){
+            ex.printStackTrace();
+            return ResponseEntity.badRequest().build();
+        }
     }
 
     @PostMapping(path = "/stop", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<State> stop(){
-        state.setState(StateType.DOWN);
-        return ResponseEntity.ok(state);
+    public ResponseEntity stop(){
+        try {
+            RequestHandler.sendRequest("stop");
+            return ResponseEntity.ok().build();
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().build();
+        }
+
     }
 
     @PostMapping(path = "/restart", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<State> restart(){
-        state.setState(StateType.UP);
-        return ResponseEntity.ok(state);
+    public ResponseEntity restart(){
+        try {
+            RequestHandler.sendRequest("restart");
+            return ResponseEntity.ok().build();
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().build();
+        }
     }
 }
