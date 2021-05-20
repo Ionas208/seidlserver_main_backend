@@ -10,11 +10,11 @@
     </parent>
     <groupId>com.seidlserver</groupId>
     <artifactId>backend</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.0.1</version>
     <name>backend</name>
     <description>Remote Server Control</description>
     <properties>
-        <java.version>11</java.version>
+        <java.version>8</java.version>
     </properties>
     <dependencies>
         <dependency>
@@ -93,10 +93,11 @@
             <plugin>
                 <groupId>com.spotify</groupId>
                 <artifactId>dockerfile-maven-plugin</artifactId>
-                <version>1.4.13</version>
+                <version>1.4.10</version>
                 <executions>
                     <execution>
                         <id>default</id>
+                        <phase>install</phase>
                         <goals>
                             <goal>build</goal>
                             <goal>push</goal>
@@ -105,13 +106,21 @@
                 </executions>
                 <configuration>
                     <repository>ionas208/seidlserver</repository>
-                    <tag>backend</tag>
+                    <tag>${project.version}</tag>
                     <buildArgs>
-                        <JAR_FILE>backend.jar</JAR_FILE>
+                        <JAR_FILE>target/${project.build.finalName}.jar</JAR_FILE>
                     </buildArgs>
                 </configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>javax.activation</groupId>
+                        <artifactId>javax.activation-api</artifactId>
+                        <version>1.2.0</version>
+                    </dependency>
+                </dependencies>
             </plugin>
         </plugins>
+        <finalName>backend</finalName>
     </build>
 
 </project>
