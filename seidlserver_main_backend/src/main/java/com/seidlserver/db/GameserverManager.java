@@ -58,7 +58,6 @@ public class GameserverManager {
         Transaction tx = null;
         List<Gameserver> servers = null;
         try{
-            System.out.println("lmao");
             tx = session.beginTransaction();
             User u = session.get(User.class, userid);
             Query q = session.createQuery("SELECT g FROM Gameserver g WHERE g.user = :u");
