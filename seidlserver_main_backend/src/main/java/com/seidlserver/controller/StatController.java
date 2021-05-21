@@ -56,7 +56,6 @@ public class StatController {
             double memFree = Double.parseDouble(RequestHandler.sendRequest("memFree"));
             double memTotal = Double.parseDouble(RequestHandler.sendRequest("memTotal"));
             MemStat memStat = new MemStat(LocalDateTime.now(), memFree, memTotal);
-            System.out.println(memStat);
             memStats.add(memStat);
             return ResponseEntity.ok(memStats);
         } catch (Exception e) {

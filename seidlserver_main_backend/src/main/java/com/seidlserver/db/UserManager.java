@@ -30,7 +30,7 @@ public class UserManager {
         factory = new Configuration().configure().buildSessionFactory();
     }
 
-    public List<User> getUsers(){
+    public List<User> getUsers() throws HibernateException{
         Session session = factory.openSession();
         Transaction tx = null;
         List<User> users = null;
@@ -38,19 +38,19 @@ public class UserManager {
             tx = session.beginTransaction();
             users = session.createQuery("SELECT u FROM User u").list();
             tx.commit();
-
+            session.close();
         }catch(HibernateException ex){
             ex.printStackTrace();
             if(tx!=null){
                 tx.rollback();
             }
-        } finally{
             session.close();
+            throw ex;
         }
         return users;
     }
 
-    public Integer addUser(String first_name, String last_name, String email, String password){
+    public Integer addUser(String first_name, String last_name, String email, String password) throws HibernateException{
         Session session = factory.openSession();
         Transaction tx = null;
         Integer id = null;
@@ -59,19 +59,19 @@ public class UserManager {
             User u = new User(first_name, last_name, email, password);
             id = (Integer) session.save(u);
             tx.commit();
-
+            session.close();
         }catch(HibernateException ex){
             ex.printStackTrace();
             if(tx!=null){
                 tx.rollback();
             }
-        } finally{
             session.close();
+            throw ex;
         }
         return id;
     }
 
-    public void removeUser(Integer id){
+    public void removeUser(Integer id) throws HibernateException{
         Session session = factory.openSession();
         Transaction tx = null;
         try{
@@ -79,18 +79,18 @@ public class UserManager {
             User u = session.get(User.class, id);
             session.remove(u);
             tx.commit();
-
+            session.close();
         }catch(HibernateException ex){
             ex.printStackTrace();
             if(tx!=null){
                 tx.rollback();
             }
-        } finally{
             session.close();
+            throw ex;
         }
     }
 
-    public User getUserByEmail(String email){
+    public User getUserByEmail(String email) throws HibernateException{
         List<User> users = getUsers();
         for (User u: users) {
             if(u.getEmail().equals(email)){

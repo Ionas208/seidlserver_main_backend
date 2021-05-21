@@ -30,6 +30,7 @@ public class AuthController {
             um.addUser(user.getFirst_name(), user.getLast_name(), user.getEmail(), hash);
             return ResponseEntity.ok().build();
         }catch(Exception e){
+            e.printStackTrace();
             return ResponseEntity.badRequest().build();
         }
     }
