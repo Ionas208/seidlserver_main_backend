@@ -17,7 +17,9 @@ import org.springframework.web.bind.annotation.RestController;
 import java.net.MalformedURLException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Random;
 
 /*
     Created by: Jonas Seidl
