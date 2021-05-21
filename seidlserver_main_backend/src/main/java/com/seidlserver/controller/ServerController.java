@@ -39,7 +39,7 @@ public class ServerController {
     @PostMapping(path = "/stop", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity stop(){
         try {
-            RequestHandler.sendRequest("stop");
+            RequestHandler.sendRequest("stop", "POST");
             return ResponseEntity.ok().build();
         } catch (MalformedURLException e) {
             e.printStackTrace();
@@ -51,7 +51,7 @@ public class ServerController {
     @PostMapping(path = "/restart", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity restart(){
         try {
-            RequestHandler.sendRequest("restart");
+            RequestHandler.sendRequest("restart", "POST");
             return ResponseEntity.ok().build();
         } catch (MalformedURLException e) {
             e.printStackTrace();
