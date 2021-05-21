@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
     Time: 11:32
 */
 public class RequestHandler {
-    public static String API = "http://seidlserver.ddns.net:8080/";
+    public static String API = "http://10.0.0.1/";
     public static String sendRequest(String entrypoint, String method) throws MalformedURLException {
         URL url = new URL(API+entrypoint);
         try {
