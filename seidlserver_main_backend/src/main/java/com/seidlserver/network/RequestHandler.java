@@ -1,7 +1,5 @@
 package com.seidlserver.network;
 
-import org.springframework.http.HttpMethod;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -16,9 +14,16 @@ import java.util.stream.Collectors;
     Time: 11:32
 */
 public class RequestHandler {
+    public static String API = "http://seidlserver.ddns.net:8080/";
 
+    public static String sendRequest(String entrypoint, String method) throws Exception {
         URL url = new URL(API+entrypoint);
+        HttpURLConnection con = (HttpURLConnection) url.openConnection();
+        con.setRequestMethod(method);
+        String data = new BufferedReader(new InputStreamReader(con.getInputStream())).lines().collect(Collectors.joining());
         int code = con.getResponseCode();
+        if(code!=200){
+            throw new Exception("Error: Server might already be running");
         }
         return data;
     }
