@@ -41,7 +41,7 @@ public class GameserverManager {
             tx = session.beginTransaction();
             servers = session.createQuery("SELECT g FROM Gameserver g").list();
             tx.commit();
-
+            session.close();
         }catch(HibernateException ex){
             ex.printStackTrace();
             if(tx!=null){
@@ -65,7 +65,7 @@ public class GameserverManager {
             servers = q.list();
             servers.addAll(u.getSharedGameservers());
             tx.commit();
-
+            session.close();
         }catch(HibernateException ex){
             ex.printStackTrace();
             if(tx!=null){
@@ -88,7 +88,7 @@ public class GameserverManager {
             Gameserver g = new Gameserver(script, servername, gt, u);
             id = (Integer)session.save(g);
             tx.commit();
-
+            session.close();
         }catch(HibernateException ex){
             ex.printStackTrace();
             if(tx!=null){
@@ -116,7 +116,7 @@ public class GameserverManager {
             }
             session.save(g);
             tx.commit();
-
+            session.close();
         }catch(HibernateException ex){
             ex.printStackTrace();
             if(tx!=null){
@@ -139,7 +139,7 @@ public class GameserverManager {
             g.getSharedUsers().remove(u);
             session.remove(g);
             tx.commit();
-
+            session.close();
         }catch(HibernateException ex){
             ex.printStackTrace();
             if(tx!=null){
@@ -158,7 +158,7 @@ public class GameserverManager {
             Gameserver g = session.get(Gameserver.class, id);
             session.remove(g);
             tx.commit();
-
+            session.close();
         }catch(HibernateException ex){
             ex.printStackTrace();
             if(tx!=null){
@@ -182,7 +182,7 @@ public class GameserverManager {
             else{
                 throw new HibernateException("Attempting to remove gameserver from different user");
             }
-
+            session.close();
         }catch(HibernateException ex){
             ex.printStackTrace();
             if(tx!=null){
