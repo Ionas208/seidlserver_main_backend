@@ -35,6 +35,7 @@ public class Gameserver {
     @JoinColumn(name = "type")
     private GameserverType type;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "userid")
     private User user;

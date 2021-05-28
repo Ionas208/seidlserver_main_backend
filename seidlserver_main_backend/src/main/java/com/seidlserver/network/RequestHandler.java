@@ -15,16 +15,16 @@ import java.util.stream.Collectors;
 */
 public class RequestHandler {
     public static String API = "http://seidlserver.ddns.net:8080/";
-    public static String sendRequest(String entrypoint) throws MalformedURLException {
+
+    public static String sendRequest(String entrypoint, String method) throws Exception {
         URL url = new URL(API+entrypoint);
-        try {
-            HttpURLConnection con = (HttpURLConnection) url.openConnection();
-            con.setRequestMethod("GET");
-            String data = new BufferedReader(new InputStreamReader(con.getInputStream())).lines().collect(Collectors.joining());
-            return data;
-        } catch (IOException e) {
-            e.printStackTrace();
+        HttpURLConnection con = (HttpURLConnection) url.openConnection();
+        con.setRequestMethod(method);
+        String data = new BufferedReader(new InputStreamReader(con.getInputStream())).lines().collect(Collectors.joining());
+        int code = con.getResponseCode();
+        if(code!=200){
+            throw new Exception("Error: Server might already be running");
         }
-        return null;
+        return data;
     }
 }

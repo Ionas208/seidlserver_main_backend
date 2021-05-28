@@ -3,6 +3,7 @@ package com.seidlserver.controller;
 import com.seidlserver.db.GameserverManager;
 import com.seidlserver.db.UserManager;
 import com.seidlserver.model.GameserverModel;
+import com.seidlserver.network.RequestHandler;
 import com.seidlserver.pojos.gameserver.Gameserver;
 import com.seidlserver.pojos.user.User;
 import org.hibernate.HibernateException;
@@ -12,6 +13,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.MalformedURLException;
 import java.util.List;
 
 /*
@@ -43,7 +45,7 @@ public class GameserverController {
     ){
         User u = getUser();
         try{
-            gm.addGameserver(gs.getServername(), gs.getScript(), gs.getType(), u.getId());
+            gm.addGameserver(gs.getScript(), gs.getServername(), gs.getType(), u.getId());
             return ResponseEntity.ok().build();
         }catch(Exception ex){
             ex.printStackTrace();
@@ -78,6 +80,59 @@ public class GameserverController {
             return ResponseEntity.ok().build();
         }catch(Exception ex){
             ex.printStackTrace();
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+    @PostMapping("/start")
+    public ResponseEntity start(@RequestParam(name = "id", defaultValue = "-1") Integer id){
+        User u = getUser();
+        List<Gameserver> servers = gm.getGameserversForUser(u.getId());
+        servers.removeIf(gs -> gs.getId() != id);
+        try {
+            Gameserver g = servers.get(0);
+            RequestHandler.sendRequest("gameserver/start?script="+g.getScript(), "POST");
+            return ResponseEntity.ok().build();
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().build();
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+    @PostMapping("/stop")
+    public ResponseEntity stop(@RequestParam(name = "id", defaultValue = "-1") Integer id){
+        User u = getUser();
+        List<Gameserver> servers = gm.getGameserversForUser(u.getId());
+        servers.removeIf(gs -> gs.getId() != id);
+        try {
+            Gameserver g = servers.get(0);
+            RequestHandler.sendRequest("gameserver/stop?script="+g.getScript(), "POST");
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+    @GetMapping("/state")
+    public ResponseEntity<String> state(@RequestParam(name = "id", defaultValue = "-1") Integer id){
+        User u = getUser();
+        List<Gameserver> servers = gm.getGameserversForUser(u.getId());
+        servers.removeIf(gs -> gs.getId() != id);
+        try {
+            Gameserver g = servers.get(0);
+            String state = RequestHandler.sendRequest("gameserver/state?script="+g.getScript(), "GET");
+            return ResponseEntity.ok(state);
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().build();
+        }
+        catch (Exception e) {
+            e.printStackTrace();
             return ResponseEntity.badRequest().build();
         }
     }
