@@ -7,6 +7,7 @@ import com.seidlserver.network.RequestHandler;
 import com.seidlserver.pojos.gameserver.Gameserver;
 import com.seidlserver.pojos.user.User;
 import org.hibernate.HibernateException;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -99,7 +100,7 @@ public class GameserverController {
         }
         catch (Exception e) {
             e.printStackTrace();
-            return ResponseEntity.badRequest().build();
+            return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -114,20 +115,23 @@ public class GameserverController {
             return ResponseEntity.ok().build();
         } catch (Exception e) {
             e.printStackTrace();
-            return ResponseEntity.badRequest().build();
+            return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
     @GetMapping("/state")
     public ResponseEntity<String> state(@RequestParam(name = "id", defaultValue = "-1") Integer id){
-        User u = getUser();
-        List<Gameserver> servers = gm.getGameserversForUser(u.getId());
-        servers.removeIf(gs -> gs.getId() != id);
         try {
+            User u = getUser();
+            List<Gameserver> servers = gm.getGameserversForUser(u.getId());
+            servers.removeIf(gs -> gs.getId() != id);
             Gameserver g = servers.get(0);
             String state = RequestHandler.sendRequest("gameserver/state?script="+g.getScript(), "GET");
             return ResponseEntity.ok(state);
-        } catch (MalformedURLException e) {
+        } catch(IndexOutOfBoundsException ex){
+            return new ResponseEntity("Gameserver with ID "+id+" is not accessible to user " + getUser().getEmail(), HttpStatus.UNAUTHORIZED);
+        }
+        catch (MalformedURLException e) {
             e.printStackTrace();
             return ResponseEntity.badRequest().build();
         }
