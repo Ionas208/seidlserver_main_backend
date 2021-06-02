@@ -91,6 +91,7 @@ public class GameserverController {
         List<Gameserver> servers = gm.getGameserversForUser(u.getId());
         servers.removeIf(gs -> gs.getId() != id);
         try {
+            System.out.println(g);
             Gameserver g = servers.get(0);
             RequestHandler.sendRequest("gameserver/start?script="+g.getScript(), "POST");
             return ResponseEntity.ok().build();
@@ -110,6 +111,7 @@ public class GameserverController {
         List<Gameserver> servers = gm.getGameserversForUser(u.getId());
         servers.removeIf(gs -> gs.getId() != id);
         try {
+            System.out.println(g);
             Gameserver g = servers.get(0);
             RequestHandler.sendRequest("gameserver/stop?script="+g.getScript(), "POST");
             return ResponseEntity.ok().build();
