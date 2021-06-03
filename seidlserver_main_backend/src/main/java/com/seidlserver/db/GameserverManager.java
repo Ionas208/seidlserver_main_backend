@@ -77,6 +77,27 @@ public class GameserverManager {
         return servers;
     }
 
+    public List<GameserverType> getGameserverTypes() throws HibernateException{
+        Session session = factory.openSession();
+        Transaction tx = null;
+        List<GameserverType> types = null;
+        try{
+            tx = session.beginTransaction();
+            Query q = session.createQuery("SELECT g FROM GameserverType g");
+            types = q.list();
+            tx.commit();
+            session.close();
+        }catch(HibernateException ex){
+            ex.printStackTrace();
+            if(tx!=null){
+                tx.rollback();
+            }
+            session.close();
+            throw ex;
+        }
+        return types;
+    }
+
     public Integer addGameserver(String script, String servername, String type, Integer userid) throws HibernateException{
         Session session = factory.openSession();
         Transaction tx = null;

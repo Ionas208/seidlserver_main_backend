@@ -5,6 +5,7 @@ import com.seidlserver.db.UserManager;
 import com.seidlserver.model.GameserverModel;
 import com.seidlserver.network.RequestHandler;
 import com.seidlserver.pojos.gameserver.Gameserver;
+import com.seidlserver.pojos.gameserver.GameserverType;
 import com.seidlserver.pojos.user.User;
 import org.hibernate.HibernateException;
 import org.springframework.http.HttpStatus;
@@ -34,6 +35,17 @@ public class GameserverController {
         try{
             List<Gameserver> servers = gm.getGameserversForUser(u.getId());
             return ResponseEntity.ok(servers);
+        }catch(Exception ex){
+            ex.printStackTrace();
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+    @GetMapping(value = "/types", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<GameserverType>> types(){
+        try{
+            List<GameserverType> types = gm.getGameserverTypes();
+            return ResponseEntity.ok(types);
         }catch(Exception ex){
             ex.printStackTrace();
             return ResponseEntity.badRequest().build();
