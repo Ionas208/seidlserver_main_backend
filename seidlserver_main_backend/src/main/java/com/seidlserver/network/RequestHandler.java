@@ -20,11 +20,16 @@ public class RequestHandler {
         URL url = new URL(API+entrypoint);
         HttpURLConnection con = (HttpURLConnection) url.openConnection();
         con.setRequestMethod(method);
-        String data = new BufferedReader(new InputStreamReader(con.getInputStream())).lines().collect(Collectors.joining());
-        if(checkForError){
-            int code = con.getResponseCode();
-            if(code!=200){
-                throw new Exception("Error: Server might already be running");
+        String data = null;
+        try{
+            data = new BufferedReader(new InputStreamReader(con.getInputStream())).lines().collect(Collectors.joining());
+        }catch(IOException ex){
+            if(checkForError){
+                ex.printStackTrace();
+                int code = con.getResponseCode();
+                if(code!=200){
+                    throw new Exception("Error: Server might already be running");
+                }
             }
         }
         return data;
