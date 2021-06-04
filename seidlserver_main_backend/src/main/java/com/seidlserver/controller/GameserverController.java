@@ -3,6 +3,7 @@ package com.seidlserver.controller;
 import com.seidlserver.db.GameserverManager;
 import com.seidlserver.db.UserManager;
 import com.seidlserver.model.GameserverModel;
+import com.seidlserver.model.GameserverResponseModel;
 import com.seidlserver.network.RequestHandler;
 import com.seidlserver.pojos.gameserver.Gameserver;
 import com.seidlserver.pojos.gameserver.GameserverType;
@@ -16,6 +17,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.MalformedURLException;
+import java.util.ArrayList;
 import java.util.List;
 
 /*
@@ -30,11 +32,15 @@ public class GameserverController {
     private GameserverManager gm = GameserverManager.getInstance();
 
     @GetMapping(value = "/list", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<Gameserver>> list(){
+    public ResponseEntity<List<GameserverResponseModel>> list(){
         User u = getUser();
         try{
             List<Gameserver> servers = gm.getGameserversForUser(u.getId());
-            return ResponseEntity.ok(servers);
+            List<GameserverResponseModel> response = new ArrayList<>();
+            for (Gameserver g: servers) {
+                response.add(new GameserverResponseModel(g.getId(), g.getScript(), g.getServername(), g.getType(), g.getOwner().getEmail()));
+            }
+            return ResponseEntity.ok(response);
         }catch(Exception ex){
             ex.printStackTrace();
             return ResponseEntity.badRequest().build();
