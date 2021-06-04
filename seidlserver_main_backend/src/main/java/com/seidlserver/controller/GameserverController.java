@@ -111,7 +111,7 @@ public class GameserverController {
         try {
             Gameserver g = servers.get(0);
             System.out.println(g);
-            RequestHandler.sendRequest("gameserver/start?script="+g.getScript(), "POST");
+            RequestHandler.sendRequest("gameserver/start?script="+g.getScript(), "POST", true);
             return ResponseEntity.ok().build();
         } catch (MalformedURLException e) {
             e.printStackTrace();
@@ -131,7 +131,7 @@ public class GameserverController {
         try {
             Gameserver g = servers.get(0);
             System.out.println(g);
-            RequestHandler.sendRequest("gameserver/stop?script="+g.getScript(), "POST");
+            RequestHandler.sendRequest("gameserver/stop?script="+g.getScript(), "POST", true);
             return ResponseEntity.ok().build();
         } catch (Exception e) {
             e.printStackTrace();
@@ -146,7 +146,7 @@ public class GameserverController {
             List<Gameserver> servers = gm.getGameserversForUser(u.getId());
             servers.removeIf(gs -> gs.getId() != id);
             Gameserver g = servers.get(0);
-            String state = RequestHandler.sendRequest("gameserver/state?script="+g.getScript(), "GET");
+            String state = RequestHandler.sendRequest("gameserver/state?script="+g.getScript(), "GET", true);
             return ResponseEntity.ok(state);
         } catch(IndexOutOfBoundsException ex){
             return new ResponseEntity("Gameserver with ID "+id+" is not accessible to user " + getUser().getEmail(), HttpStatus.UNAUTHORIZED);

@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 public class RequestHandler {
     public static String API = "http://seidlserver.ddns.net:8080/";
 
-    public static String sendRequest(String entrypoint, String method) throws Exception {
+    public static String sendRequest(String entrypoint, String method, Boolean checkForError) throws Exception {
         URL url = new URL(API+entrypoint);
         HttpURLConnection con = (HttpURLConnection) url.openConnection();
         con.setRequestMethod(method);

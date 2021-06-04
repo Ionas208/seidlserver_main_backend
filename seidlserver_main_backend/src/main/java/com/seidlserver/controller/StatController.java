@@ -36,7 +36,7 @@ public class StatController {
     public ResponseEntity<List<CpuStat>> cpu(){
         ObjectMapper om = new ObjectMapper();
         try {
-            String cpu = RequestHandler.sendRequest("server/cpu", "GET");
+            String cpu = RequestHandler.sendRequest("server/cpu", "GET", true);
             JsonNode node = om.readTree(cpu);
             CpuLoad load =  om.readValue(node.get("sysstat").get("hosts").toString(), Host[].class)[0].getStatistics().get(0).getLoad().get(0);
             cpuStats.add(new CpuStat(LocalDateTime.now(), load));
@@ -50,8 +50,8 @@ public class StatController {
     @GetMapping(path = "/mem", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<MemStat>> mem(){
         try {
-            double memFree = Double.parseDouble(RequestHandler.sendRequest("server/memFree", "GET"));
-            double memTotal = Double.parseDouble(RequestHandler.sendRequest("server/memTotal", "GET"));
+            double memFree = Double.parseDouble(RequestHandler.sendRequest("server/memFree", "GET", true));
+            double memTotal = Double.parseDouble(RequestHandler.sendRequest("server/memTotal", "GET", true));
             MemStat memStat = new MemStat(LocalDateTime.now(), memFree, memTotal);
             memStats.add(memStat);
             return ResponseEntity.ok(memStats);
