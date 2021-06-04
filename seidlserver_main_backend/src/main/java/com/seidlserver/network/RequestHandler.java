@@ -21,9 +21,11 @@ public class RequestHandler {
         HttpURLConnection con = (HttpURLConnection) url.openConnection();
         con.setRequestMethod(method);
         String data = new BufferedReader(new InputStreamReader(con.getInputStream())).lines().collect(Collectors.joining());
-        int code = con.getResponseCode();
-        if(code!=200){
-            throw new Exception("Error: Server might already be running");
+        if(checkForError){
+            int code = con.getResponseCode();
+            if(code!=200){
+                throw new Exception("Error: Server might already be running");
+            }
         }
         return data;
     }
