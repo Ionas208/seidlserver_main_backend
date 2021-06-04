@@ -18,7 +18,7 @@ public class StatBuilder implements Runnable{
     @Override
     public void run() {
         try {
-            Thread.sleep(5000);
+            Thread.sleep(25000);
             while(true){
                 //Cpu
                 URL url = new URL("http://localhost/stats/cpu");

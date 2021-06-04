@@ -106,11 +106,14 @@ public class GameserverController {
     @PostMapping("/start")
     public ResponseEntity start(@RequestParam(name = "id", defaultValue = "-1") Integer id){
         User u = getUser();
-        List<Gameserver> servers = gm.getGameserversForUser(u.getId());
-        servers.removeIf(gs -> gs.getId() != id);
+        Gameserver g = gm.getGameserversForId(id);
+        if(g == null){
+            throw new HibernateException("");
+        }
+        if(!(g.getOwner().getId() == u.getId())){
+            throw new IndexOutOfBoundsException();
+        }
         try {
-            Gameserver g = servers.get(0);
-            System.out.println(g);
             RequestHandler.sendRequest("gameserver/start?script="+g.getScript(), "POST", true);
             return ResponseEntity.ok().build();
         } catch (MalformedURLException e) {
@@ -126,11 +129,14 @@ public class GameserverController {
     @PostMapping("/stop")
     public ResponseEntity stop(@RequestParam(name = "id", defaultValue = "-1") Integer id){
         User u = getUser();
-        List<Gameserver> servers = gm.getGameserversForUser(u.getId());
-        servers.removeIf(gs -> gs.getId() != id);
+        Gameserver g = gm.getGameserversForId(id);
+        if(g == null){
+            throw new HibernateException("");
+        }
+        if(!(g.getOwner().getId() == u.getId())){
+            throw new IndexOutOfBoundsException();
+        }
         try {
-            Gameserver g = servers.get(0);
-            System.out.println(g);
             RequestHandler.sendRequest("gameserver/stop?script="+g.getScript(), "POST", true);
             return ResponseEntity.ok().build();
         } catch (Exception e) {
@@ -143,13 +149,20 @@ public class GameserverController {
     public ResponseEntity<String> state(@RequestParam(name = "id", defaultValue = "-1") Integer id){
         try {
             User u = getUser();
-            List<Gameserver> servers = gm.getGameserversForUser(u.getId());
-            servers.removeIf(gs -> gs.getId() != id);
-            Gameserver g = servers.get(0);
+            Gameserver g = gm.getGameserversForId(id);
+            if(g == null){
+                throw new HibernateException("");
+            }
+            if(!(g.getOwner().getId() == u.getId())){
+                throw new IndexOutOfBoundsException();
+            }
             String state = RequestHandler.sendRequest("gameserver/state?script="+g.getScript(), "GET", true);
             return ResponseEntity.ok(state);
         } catch(IndexOutOfBoundsException ex){
             return new ResponseEntity("Gameserver with ID "+id+" is not accessible to user " + getUser().getEmail(), HttpStatus.UNAUTHORIZED);
+        }
+        catch(HibernateException ex){
+            return new ResponseEntity("Gameserver with ID "+id+" does not exist", HttpStatus.BAD_REQUEST);
         }
         catch (MalformedURLException e) {
             e.printStackTrace();
