@@ -73,7 +73,7 @@ public class GameserverController {
     }
 
     @PostMapping(value = "/remove", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity add(
+    public ResponseEntity remove(
             @RequestParam(name = "id", defaultValue = "-1") Integer id
             ){
         User u = getUser();
