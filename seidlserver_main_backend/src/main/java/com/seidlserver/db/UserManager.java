@@ -99,4 +99,23 @@ public class UserManager {
         }
         return null;
     }
+
+    public void changePassword(int userid, String newPassword){
+        Session session = factory.openSession();
+        Transaction tx = null;
+        try{
+            tx = session.beginTransaction();
+            User u = session.get(User.class, userid);
+            u.setPassword(newPassword);
+            tx.commit();
+            session.close();
+        }catch(HibernateException ex){
+            ex.printStackTrace();
+            if(tx!=null){
+                tx.rollback();
+            }
+            session.close();
+            throw ex;
+        }
+    }
 }

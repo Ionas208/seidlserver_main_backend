@@ -26,10 +26,8 @@ public class RequestHandler {
         }catch(IOException ex){
             if(checkForError){
                 ex.printStackTrace();
-                int code = con.getResponseCode();
-                if(code!=200){
-                    throw new Exception("Error: Server might already be running");
-                }
+                con.getResponseCode();
+                throw ex;
             }
         }
         return data;

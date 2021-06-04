@@ -1,6 +1,8 @@
 package com.seidlserver.controller;
 
 import com.seidlserver.wol.WakeOnLan;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -13,12 +15,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class WOLController {
     @PostMapping("/wake")
-    public String wake(){
+    public ResponseEntity wake(){
         try{
             WakeOnLan.wake();
-            return "Magic Packet sent";
+            return ResponseEntity.ok("Magic Packet sent");
         }catch(Exception ex){
-            return ex.toString();
+            return new ResponseEntity(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }

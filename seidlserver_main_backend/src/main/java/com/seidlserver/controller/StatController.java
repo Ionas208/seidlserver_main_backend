@@ -8,6 +8,7 @@ import com.seidlserver.pojos.stat.CpuStat;
 import com.seidlserver.pojos.stat.Host;
 import com.seidlserver.pojos.stat.MemStat;
 import com.seidlserver.network.RequestHandler;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -43,7 +44,7 @@ public class StatController {
             return ResponseEntity.ok(cpuStats);
         } catch (Exception e) {
             e.printStackTrace();
-            return ResponseEntity.badRequest().build();
+            return new ResponseEntity(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -57,7 +58,7 @@ public class StatController {
             return ResponseEntity.ok(memStats);
         } catch (Exception e) {
             e.printStackTrace();
-            return ResponseEntity.badRequest().build();
+            return new ResponseEntity(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }

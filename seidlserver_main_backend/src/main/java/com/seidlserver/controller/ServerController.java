@@ -5,6 +5,7 @@ import com.seidlserver.network.StateHandler;
 import com.seidlserver.pojos.state.State;
 import com.seidlserver.wol.WakeOnLan;
 import org.apache.coyote.Request;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -32,7 +33,7 @@ public class ServerController {
             return ResponseEntity.ok().build();
         }catch(Exception ex){
             ex.printStackTrace();
-            return ResponseEntity.badRequest().build();
+            return new ResponseEntity(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -43,7 +44,7 @@ public class ServerController {
             return ResponseEntity.ok().build();
         } catch (Exception e) {
             e.printStackTrace();
-            return ResponseEntity.badRequest().build();
+            return new ResponseEntity(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
     }
@@ -55,7 +56,7 @@ public class ServerController {
             return ResponseEntity.ok().build();
         } catch (Exception e) {
             e.printStackTrace();
-            return ResponseEntity.badRequest().build();
+            return new ResponseEntity(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }

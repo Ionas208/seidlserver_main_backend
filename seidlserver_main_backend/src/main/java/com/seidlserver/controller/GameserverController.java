@@ -43,7 +43,7 @@ public class GameserverController {
             return ResponseEntity.ok(response);
         }catch(Exception ex){
             ex.printStackTrace();
-            return ResponseEntity.badRequest().build();
+            return new ResponseEntity(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -54,7 +54,7 @@ public class GameserverController {
             return ResponseEntity.ok(types);
         }catch(Exception ex){
             ex.printStackTrace();
-            return ResponseEntity.badRequest().build();
+            return new ResponseEntity(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -66,9 +66,12 @@ public class GameserverController {
         try{
             gm.addGameserver(gs.getScript(), gs.getServername(), gs.getType(), u.getId());
             return ResponseEntity.ok().build();
-        }catch(Exception ex){
+        } catch(HibernateException ex){
             ex.printStackTrace();
-            return ResponseEntity.badRequest().build();
+            return new ResponseEntity(ex.getMessage(), HttpStatus.CONFLICT);
+        } catch(Exception ex){
+            ex.printStackTrace();
+            return new ResponseEntity(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -80,9 +83,13 @@ public class GameserverController {
         try{
             gm.removeGameserverFromUser(id, u.getId());
             return ResponseEntity.ok().build();
-        }catch(Exception ex){
+        } catch(HibernateException ex){
             ex.printStackTrace();
-            return ResponseEntity.badRequest().build();
+            return new ResponseEntity(ex.getMessage(), HttpStatus.UNAUTHORIZED);
+        }
+        catch(Exception ex){
+            ex.printStackTrace();
+            return new ResponseEntity(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -97,9 +104,13 @@ public class GameserverController {
             User recipient = um.getUserByEmail(email);
             gm.shareGameserver(serverid, u.getId(), recipient.getId());
             return ResponseEntity.ok().build();
-        }catch(Exception ex){
+        } catch(HibernateException ex){
             ex.printStackTrace();
-            return ResponseEntity.badRequest().build();
+            return new ResponseEntity(ex.getMessage(), HttpStatus.UNAUTHORIZED);
+        }
+        catch(Exception ex){
+            ex.printStackTrace();
+            return new ResponseEntity(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -108,21 +119,17 @@ public class GameserverController {
         User u = getUser();
         Gameserver g = gm.getGameserversForId(id);
         if(g == null){
-            throw new HibernateException("");
+            return new ResponseEntity("Gameserver with ID "+id+" does not exist", HttpStatus.BAD_REQUEST);
         }
         if(!(g.getOwner().getId() == u.getId())){
-            throw new IndexOutOfBoundsException();
+            return new ResponseEntity("Gameserver with ID "+id+" is not accessible to user " + getUser().getEmail(), HttpStatus.UNAUTHORIZED);
         }
         try {
             RequestHandler.sendRequest("gameserver/start?script="+g.getScript(), "POST", true);
             return ResponseEntity.ok().build();
-        } catch (MalformedURLException e) {
+        } catch (Exception e) {
             e.printStackTrace();
-            return ResponseEntity.badRequest().build();
-        }
-        catch (Exception e) {
-            e.printStackTrace();
-            return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -131,17 +138,17 @@ public class GameserverController {
         User u = getUser();
         Gameserver g = gm.getGameserversForId(id);
         if(g == null){
-            throw new HibernateException("");
+            return new ResponseEntity("Gameserver with ID "+id+" does not exist", HttpStatus.BAD_REQUEST);
         }
         if(!(g.getOwner().getId() == u.getId())){
-            throw new IndexOutOfBoundsException();
+            return new ResponseEntity("Gameserver with ID "+id+" is not accessible to user " + getUser().getEmail(), HttpStatus.UNAUTHORIZED);
         }
         try {
             RequestHandler.sendRequest("gameserver/stop?script="+g.getScript(), "POST", true);
             return ResponseEntity.ok().build();
         } catch (Exception e) {
             e.printStackTrace();
-            return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -151,26 +158,16 @@ public class GameserverController {
             User u = getUser();
             Gameserver g = gm.getGameserversForId(id);
             if(g == null){
-                throw new HibernateException("");
+                return new ResponseEntity("Gameserver with ID "+id+" does not exist", HttpStatus.BAD_REQUEST);
             }
             if(!(g.getOwner().getId() == u.getId())){
-                throw new IndexOutOfBoundsException();
+                return new ResponseEntity("Gameserver with ID "+id+" is not accessible to user " + getUser().getEmail(), HttpStatus.UNAUTHORIZED);
             }
             String state = RequestHandler.sendRequest("gameserver/state?script="+g.getScript(), "GET", true);
             return ResponseEntity.ok(state);
-        } catch(IndexOutOfBoundsException ex){
-            return new ResponseEntity("Gameserver with ID "+id+" is not accessible to user " + getUser().getEmail(), HttpStatus.UNAUTHORIZED);
-        }
-        catch(HibernateException ex){
-            return new ResponseEntity("Gameserver with ID "+id+" does not exist", HttpStatus.BAD_REQUEST);
-        }
-        catch (MalformedURLException e) {
+        } catch (Exception e) {
             e.printStackTrace();
-            return ResponseEntity.badRequest().build();
-        }
-        catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.badRequest().build();
+            return new ResponseEntity(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
