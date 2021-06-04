@@ -60,7 +60,7 @@ public class GameserverManager {
         try{
             tx = session.beginTransaction();
             User u = session.get(User.class, userid);
-            Query q = session.createQuery("SELECT g FROM Gameserver g WHERE g.user = :u");
+            Query q = session.createQuery("SELECT g FROM Gameserver g WHERE g.owner = :u");
             q.setParameter("u", u);
             servers = q.list();
             servers.addAll(u.getSharedGameservers());
@@ -130,7 +130,7 @@ public class GameserverManager {
             Gameserver g = session.get(Gameserver.class, gameserverid);
             User recipient = session.get(User.class, recipientID);
 
-            if(g.getUser().getId() == serverownerID){
+            if(g.getOwner().getId() == serverownerID){
                 g.getSharedUsers().add(recipient);
             }else{
                 throw new HibernateException("Attempting to share gameserver from different user");
@@ -196,7 +196,7 @@ public class GameserverManager {
         try{
             tx = session.beginTransaction();
             Gameserver g = session.get(Gameserver.class, id);
-            if(g.getUser().getId() == userid){
+            if(g.getOwner().getId() == userid){
                 session.remove(g);
                 tx.commit();
             }

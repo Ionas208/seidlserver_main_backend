@@ -27,18 +27,23 @@ import java.util.List;
 @Table(name="USERS")
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class User implements UserDetails{
+    @JsonIgnore
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="id")
     private int id;
+
+    @JsonIgnore
     @Column(name="first_name")
     private String first_name;
 
+    @JsonIgnore
     @Column(name="last_name")
     private String last_name;
 
     @Column(name="email")
     private String email;
 
+    @JsonIgnore
     @Column(name="password")
     private String password;
 
@@ -54,31 +59,37 @@ public class User implements UserDetails{
         this.password = password;
     }
 
+    @JsonIgnore
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return new ArrayList<>();
     }
 
+    @JsonIgnore
     @Override
     public String getUsername() {
         return email;
     }
 
+    @JsonIgnore
     @Override
     public boolean isAccountNonExpired() {
         return true;
     }
 
+    @JsonIgnore
     @Override
     public boolean isAccountNonLocked() {
         return true;
     }
 
+    @JsonIgnore
     @Override
     public boolean isCredentialsNonExpired() {
         return true;
     }
 
+    @JsonIgnore
     @Override
     public boolean isEnabled() {
         return true;

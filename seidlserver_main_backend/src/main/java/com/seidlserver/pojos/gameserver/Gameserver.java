@@ -35,10 +35,9 @@ public class Gameserver {
     @JoinColumn(name = "type")
     private GameserverType type;
 
-    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "userid")
-    private User user;
+    private User owner;
 
     @JsonIgnore
     @ManyToMany(targetEntity = User.class)
@@ -49,6 +48,6 @@ public class Gameserver {
         this.script = script;
         this.servername = servername;
         this.type = type;
-        this.user = user;
+        this.owner = user;
     }
 }
