@@ -196,6 +196,9 @@ public class GameserverManager {
         try{
             tx = session.beginTransaction();
             Gameserver g = session.get(Gameserver.class, id);
+            System.out.println("=============================================gameserver"+g);
+            System.out.println("=============================================id"+id);
+            System.out.println("=============================================userid"+userid);
             if(g.getOwner().getId() == userid){
                 session.remove(g);
                 tx.commit();
