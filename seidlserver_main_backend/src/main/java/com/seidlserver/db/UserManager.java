@@ -118,4 +118,23 @@ public class UserManager {
             throw ex;
         }
     }
+
+    public void changeEmail(int userid, String newEmail){
+        Session session = factory.openSession();
+        Transaction tx = null;
+        try{
+            tx = session.beginTransaction();
+            User u = session.get(User.class, userid);
+            u.setEmail(newEmail);
+            tx.commit();
+            session.close();
+        }catch(HibernateException ex){
+            ex.printStackTrace();
+            if(tx!=null){
+                tx.rollback();
+            }
+            session.close();
+            throw ex;
+        }
+    }
 }

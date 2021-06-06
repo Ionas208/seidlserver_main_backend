@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
@@ -43,13 +44,37 @@ public class AuthController {
     }
 
     @PostMapping("/change/password")
-    public ResponseEntity change_password(@RequestParam String newPassword){
+    public ResponseEntity change_password(@RequestParam String oldPassword, @RequestParam String newPassword){
         UserManager um = UserManager.getInstance();
         PasswordEncoder encoder = context.getBean("passwordEncoder", PasswordEncoder.class);
         User u = getUser();
-        String hash = encoder.encode(newPassword);
+        String hash_new = encoder.encode(newPassword);
         try{
-            um.changePassword(u.getId(), hash);
+            if(BCrypt.checkpw(oldPassword, u.getPassword())){
+                um.changePassword(u.getId(), hash_new);
+            }else{
+                return new ResponseEntity("Old password is wrong.", HttpStatus.BAD_REQUEST);
+            }
+
+            return ResponseEntity.ok().build();
+        } catch(Exception e){
+            e.printStackTrace();
+            return new ResponseEntity(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PostMapping("/change/email")
+    public ResponseEntity change_email(@RequestParam String password, @RequestParam String email){
+        UserManager um = UserManager.getInstance();
+        PasswordEncoder encoder = context.getBean("passwordEncoder", PasswordEncoder.class);
+        User u = getUser();
+        try{
+            if(BCrypt.checkpw(password, u.getPassword())){
+                um.changePassword(u.getId(), email);
+            }else{
+                return new ResponseEntity("Old password is wrong.", HttpStatus.BAD_REQUEST);
+            }
+
             return ResponseEntity.ok().build();
         } catch(Exception e){
             e.printStackTrace();
