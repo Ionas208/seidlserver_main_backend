@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class GameserverModel {
-    public String script;
+    public String linuxuser;
     public String servername;
     public String type;
 }

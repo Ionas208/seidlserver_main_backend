@@ -38,7 +38,7 @@ public class GameserverController {
             List<Gameserver> servers = gm.getGameserversForUser(u.getId());
             List<GameserverResponseModel> response = new ArrayList<>();
             for (Gameserver g: servers) {
-                response.add(new GameserverResponseModel(g.getId(), g.getScript(), g.getServername(), g.getType(), g.getOwner().getEmail()));
+                response.add(new GameserverResponseModel(g.getId(), g.getLinuxuser(), g.getServername(), g.getType(), g.getOwner().getEmail()));
             }
             return ResponseEntity.ok(response);
         }catch(Exception ex){
@@ -64,7 +64,7 @@ public class GameserverController {
     ){
         User u = getUser();
         try{
-            gm.addGameserver(gs.getScript(), gs.getServername(), gs.getType(), u.getId());
+            gm.addGameserver(gs.getLinuxuser(), gs.getServername(), gs.getType(), u.getId());
             return ResponseEntity.ok().build();
         } catch(HibernateException ex){
             ex.printStackTrace();
@@ -125,7 +125,7 @@ public class GameserverController {
             return new ResponseEntity("Gameserver with ID "+id+" is not accessible to user " + getUser().getEmail(), HttpStatus.UNAUTHORIZED);
         }
         try {
-            RequestHandler.sendRequest("gameserver/start?script="+g.getScript(), "POST", true);
+            RequestHandler.sendRequest("gameserver/start?linuxuser="+g.getLinuxuser()+"&script="+g.getType().getScript(), "POST", true);
             return ResponseEntity.ok().build();
         } catch (Exception e) {
             e.printStackTrace();
@@ -144,7 +144,7 @@ public class GameserverController {
             return new ResponseEntity("Gameserver with ID "+id+" is not accessible to user " + getUser().getEmail(), HttpStatus.UNAUTHORIZED);
         }
         try {
-            RequestHandler.sendRequest("gameserver/stop?script="+g.getScript(), "POST", true);
+            RequestHandler.sendRequest("gameserver/stop?linuxuser="+g.getLinuxuser()+"&script="+g.getType().getScript(), "POST", true);
             return ResponseEntity.ok().build();
         } catch (Exception e) {
             e.printStackTrace();
@@ -163,7 +163,7 @@ public class GameserverController {
             if(!(g.getOwner().getId() == u.getId())){
                 return new ResponseEntity("Gameserver with ID "+id+" is not accessible to user " + getUser().getEmail(), HttpStatus.UNAUTHORIZED);
             }
-            String state = RequestHandler.sendRequest("gameserver/state?script="+g.getScript(), "GET", true);
+            String state = RequestHandler.sendRequest("gameserver/state?linuxuser="+g.getLinuxuser()+"&script="+g.getType().getScript(), "GET", true);
             return ResponseEntity.ok(state);
         } catch (Exception e) {
             e.printStackTrace();

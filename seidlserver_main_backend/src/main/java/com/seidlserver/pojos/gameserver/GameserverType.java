@@ -23,4 +23,7 @@ public class GameserverType {
 
     @Column(name="url")
     private String url;
+
+    @Column(name="script")
+    private String script;
 }

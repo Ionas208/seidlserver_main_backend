@@ -25,8 +25,8 @@ public class Gameserver {
     @Column(name="id")
     public int id;
 
-    @Column(name="script")
-    public String script;
+    @Column(name="linuxuser")
+    public String linuxuser;
 
     @Column(name="servername")
     public String servername;
@@ -44,8 +44,8 @@ public class Gameserver {
     @JoinTable(name="USER_GAMESERVER", joinColumns = { @JoinColumn(name = "gameserverid") }, inverseJoinColumns = { @JoinColumn(name = "userid") })
     private List<User> sharedUsers;
 
-    public Gameserver(String script, String servername, GameserverType type, User user) {
-        this.script = script;
+    public Gameserver(String linuxuser, String servername, GameserverType type, User user) {
+        this.linuxuser = linuxuser;
         this.servername = servername;
         this.type = type;
         this.owner = user;

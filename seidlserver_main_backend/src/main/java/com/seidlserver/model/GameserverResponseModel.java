@@ -18,7 +18,7 @@ import javax.persistence.*;
 public class GameserverResponseModel {
     public int id;
 
-    public String script;
+    public String linuxuser;
 
     public String servername;
 
