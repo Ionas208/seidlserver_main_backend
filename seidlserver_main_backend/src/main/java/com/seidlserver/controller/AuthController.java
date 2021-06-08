@@ -66,11 +66,10 @@ public class AuthController {
     @PostMapping("/change/email")
     public ResponseEntity change_email(@RequestParam String password, @RequestParam String email){
         UserManager um = UserManager.getInstance();
-        PasswordEncoder encoder = context.getBean("passwordEncoder", PasswordEncoder.class);
         User u = getUser();
         try{
             if(BCrypt.checkpw(password, u.getPassword())){
-                um.changePassword(u.getId(), email);
+                um.changeEmail(u.getId(), email);
             }else{
                 return new ResponseEntity("Old password is wrong.", HttpStatus.BAD_REQUEST);
             }
