@@ -14,6 +14,11 @@ import java.util.List;
     Date: 23.03.2021
     Time: 10:48
 */
+
+/***
+ * Data class for the Gameserver
+ * Mapped to GAMESERVER Table in DB
+ */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

@@ -25,12 +25,25 @@ import java.util.List;
     Date: 23.03.2021
     Time: 10:46
 */
+/***
+ * Controller for gameserver related requests
+ * Reachable under /gameserver/
+ */
 @RestController
 @RequestMapping("gameserver")
 public class GameserverController {
 
     private GameserverManager gm = GameserverManager.getInstance();
 
+    /***
+     * Entrypoint for getting an array for all the avaible gameservers of the user
+     * @return ResponseEntity with Code
+     *         200 OK: When the list was fetched successfully
+     *                 JSON Array of Gameservers is included in the response body
+     *         500 INTERNAL SERVER ERROR: When there is some other error
+     *                                    Error message is included in the response body
+     *
+     */
     @GetMapping(value = "/list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<GameserverResponseModel>> list(){
         User u = getUser();
@@ -47,6 +60,14 @@ public class GameserverController {
         }
     }
 
+    /***
+     * Entrypoint for getting an array of all the available Gameservertypes (i.e. ARK, TS3, ...)
+     * @return ResponseEntity with Code
+     *         200 OK: When the list was successfully fetched
+     *                 JSON array of types is included in the response body
+     *         500 INTERNAL SERVER ERROR: When there is some other error
+     *                                    Error message is included in the response body
+     */
     @GetMapping(value = "/types", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<GameserverType>> types(){
         try{
@@ -58,6 +79,15 @@ public class GameserverController {
         }
     }
 
+    /***
+     * Entrypoint for adding an Gameserver to the current user
+     * @param gs JSON Model of the Gameserver
+     * @return ResponseEntity with Code
+     *         200 OK: When adding was successful
+     *         409 CONFLICT: When the script is not unique
+     *         500 INTERNAL SERVER ERROR: When there is some other error
+     *                                    Error message is included in the response body
+     */
     @PostMapping(value = "/add", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity add(
             @RequestBody GameserverModel gs
@@ -75,6 +105,15 @@ public class GameserverController {
         }
     }
 
+    /***
+     * Entrypoint for removing a gameserver identified via its id
+     * @param id The id of the gameserver
+     * @return ResponseEntity with Code
+     *         200 OK: When the removal was successful
+     *         401 UNAUTHORIZED: When the gameserver to remove does not belong to the current user
+     *         500 INTERNAL SERVER ERROR: When there is some other error
+     *                                    Error message is included in the response body
+     */
     @PostMapping(value = "/remove", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity remove(
             @RequestParam(name = "id", defaultValue = "-1") Integer id
@@ -93,6 +132,16 @@ public class GameserverController {
         }
     }
 
+    /***
+     * Entrypoint for sharing a gameserver to another user
+     * @param serverid The ID of the server to share
+     * @param email The email of the user to be shared with
+     * @return ResponseEntity with Code
+     *         200 OK: When the sharing was successful
+     *         401 UNAUTHORIZED: When the gameserver to share does not belong to the current user
+     *         500 INTERNAL SERVER ERROR: When there is some other error
+     *                                    Error message is included in the response body
+     */
     @PostMapping(value = "/share", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity share(
             @RequestParam(name = "serverid") Integer serverid,
@@ -114,6 +163,16 @@ public class GameserverController {
         }
     }
 
+    /***
+     * Entrypoint for starting a gameserver
+     * @param id The ID of the gameserver to be started
+     * @return ResponseEntity with Code
+     *         200 OK: When the starting was successful
+     *         400 BAD REQUEST: When the gameserver does not exist
+     *         401 UNAUTHORIZED: When the gameserver to start is not accessible to the current user
+     *         500 INTERNAL SERVER ERROR: When there is some other error
+     *                                    Error message is included in the response body
+     */
     @PostMapping("/start")
     public ResponseEntity start(@RequestParam(name = "id", defaultValue = "-1") Integer id){
         User u = getUser();
@@ -133,6 +192,16 @@ public class GameserverController {
         }
     }
 
+    /***
+     * Entrypoint for stopping a gameserver
+     * @param id The ID of the gameserver to be stopped
+     * @return ResponseEntity with Code
+     *         200 OK: When the stopping was successful
+     *         400 BAD REQUEST: When the gameserver does not exist
+     *         401 UNAUTHORIZED: When the gameserver to stop is not accessible to the current user
+     *         500 INTERNAL SERVER ERROR: When there is some other error
+     *                                    Error message is included in the response body
+     */
     @PostMapping("/stop")
     public ResponseEntity stop(@RequestParam(name = "id", defaultValue = "-1") Integer id){
         User u = getUser();
@@ -152,6 +221,17 @@ public class GameserverController {
         }
     }
 
+    /***
+     * Entrypoint for getting the current state of a gameserver (ONLINE or OFFLINE)
+     * @param id The ID of the gameserver to know the state of
+     * @return ResponseEntity with Code
+     *         200 OK: When the fetching of the state was successful
+     *                 State included in the response body
+     *         400 BAD REQUEST: When the gameserver does not exist
+     *         401 UNAUTHORIZED: When the gameserver to fetch the state of is not accessible to the current user
+     *         500 INTERNAL SERVER ERROR: When there is some other error
+     *                                    Error message is included in the response body
+     */
     @GetMapping("/state")
     public ResponseEntity<String> state(@RequestParam(name = "id", defaultValue = "-1") Integer id){
         try {
@@ -171,6 +251,11 @@ public class GameserverController {
         }
     }
 
+    /***
+     * This method fetches the user from the current Security Context
+     * (i.e. from the JWT token sent with the request)
+     * @return current User
+     */
     private User getUser(){
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         UserManager um = UserManager.getInstance();

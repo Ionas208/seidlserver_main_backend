@@ -13,6 +13,11 @@ import java.util.List;
     Date: 06.04.2021
     Time: 10:16
 */
+
+/***
+ * Data Class for a Statistic
+ * Used for extracting data from JSON
+ */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

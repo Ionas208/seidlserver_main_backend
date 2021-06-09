@@ -19,6 +19,11 @@ import org.springframework.web.bind.annotation.*;
     Date: 08.04.2021
     Time: 10:59<
 */
+
+/***
+ * Controller for authentication related requests
+ * Reachable under /auth/
+ */
 @RestController
 @RequestMapping("auth")
 public class AuthController {
@@ -26,6 +31,15 @@ public class AuthController {
     @Autowired
     private ApplicationContext context;
 
+    /***
+     * Entrypoint for registering a new user
+     * @param user Json Model in the Request Body for the new user
+     * @return ResponseEntity with Code
+     *         200 OK: When register was successful
+     *         409 CONFLICT: When there is a duplicate email
+     *         500 INTERNAL SERVER ERROR: When there is some other error
+     *                                    Error message is included in the response body
+     */
     @PostMapping("/register")
     public ResponseEntity register(@RequestBody User user){
         UserManager um = UserManager.getInstance();
@@ -43,6 +57,17 @@ public class AuthController {
         }
     }
 
+
+    /***
+     * Entrypoint for changing a password
+     * @param oldPassword The old password used for authenticating the change
+     * @param newPassword The new password to be changed to
+     * @return ResponseEntity with Code
+     *         200 OK: When the change was successful
+     *         400 BAD REQUEST: When the password authentication was unsuccessful
+     *         500 INTERNAL SERVER ERROR: When there is some other error
+     *                                    Error message is included in the response body
+     */
     @PostMapping("/change/password")
     public ResponseEntity change_password(@RequestParam String oldPassword, @RequestParam String newPassword){
         UserManager um = UserManager.getInstance();
@@ -63,6 +88,16 @@ public class AuthController {
         }
     }
 
+    /***
+     * Entrypoint for changing the email
+     * @param password  The password used for authenticating the change
+     * @param email The new email to be changed to
+     * @return ResponseEntity with Code
+     *         200 OK: When the change was successful
+     *         400 BAD REQUEST: When the password authentication was unsuccessful
+     *         500 INTERNAL SERVER ERROR: When there is some other error
+     *                                    Error message is included in the response body
+     */
     @PostMapping("/change/email")
     public ResponseEntity change_email(@RequestParam String password, @RequestParam String email){
         UserManager um = UserManager.getInstance();
@@ -81,6 +116,11 @@ public class AuthController {
         }
     }
 
+    /***
+     * This method fetches the user from the current Security Context
+     * (i.e. from the JWT token sent with the request)
+     * @return current User
+     */
     private User getUser(){
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         UserManager um = UserManager.getInstance();

@@ -12,6 +12,11 @@ import javax.persistence.*;
     Date: 04.06.2021
     Time: 12:35
 */
+
+/***
+ * JSON Model Class to be used while returning a list of gameserver
+ * Needed because all the information of a User (i.e. password) is not be sent with the response
+ */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

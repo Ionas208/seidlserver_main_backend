@@ -11,6 +11,10 @@ import java.time.LocalDateTime;
     Date: 13.04.2021
     Time: 10:52
 */
+
+/***
+ * Data Class for a Memory Statistic Entry
+ */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

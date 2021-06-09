@@ -13,9 +13,21 @@ import java.util.stream.Collectors;
     Date: 28.04.2021
     Time: 11:32
 */
+
+/***
+ * Class for sending requests to the API
+ */
 public class RequestHandler {
     public static String API = "http://seidlserver.ddns.net:8080/";
 
+    /***
+     * Sends a request to the API
+     * @param entrypoint The entrypoint on the API (i.e. start)
+     * @param method The request method (GET, POST, ...)
+     * @param checkForError Whether to check for errors
+     * @return The Response from the API
+     * @throws Exception
+     */
     public static String sendRequest(String entrypoint, String method, Boolean checkForError) throws Exception {
         URL url = new URL(API+entrypoint);
         HttpURLConnection con = (HttpURLConnection) url.openConnection();

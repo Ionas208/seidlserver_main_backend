@@ -14,6 +14,10 @@ import java.util.List;
     Date: 25.03.2021
     Time: 18:21
 */
+
+/***
+ * Singleton Class for DB actions with the User
+ */
 public class UserManager {
     private static SessionFactory factory;
 
@@ -30,6 +34,11 @@ public class UserManager {
         factory = new Configuration().configure().buildSessionFactory();
     }
 
+    /***
+     * Fetches all Users
+     * @return List of all Users
+     * @throws HibernateException
+     */
     public List<User> getUsers() throws HibernateException{
         Session session = factory.openSession();
         Transaction tx = null;
@@ -50,6 +59,15 @@ public class UserManager {
         return users;
     }
 
+    /***
+     * Adds a user
+     * @param first_name First name of the User
+     * @param last_name Last name of the User
+     * @param email Email of the User
+     * @param password Hashed password of the User
+     * @return The ID of the new User
+     * @throws HibernateException
+     */
     public Integer addUser(String first_name, String last_name, String email, String password) throws HibernateException{
         Session session = factory.openSession();
         Transaction tx = null;
@@ -71,6 +89,11 @@ public class UserManager {
         return id;
     }
 
+    /***
+     * Removes a user
+     * @param id The ID of the User to remove
+     * @throws HibernateException
+     */
     public void removeUser(Integer id) throws HibernateException{
         Session session = factory.openSession();
         Transaction tx = null;
@@ -90,6 +113,12 @@ public class UserManager {
         }
     }
 
+    /***
+     * Fetches a user via its email
+     * @param email Email of the User
+     * @return The User with the particular email
+     * @throws HibernateException
+     */
     public User getUserByEmail(String email) throws HibernateException{
         List<User> users = getUsers();
         for (User u: users) {
@@ -100,6 +129,11 @@ public class UserManager {
         return null;
     }
 
+    /***
+     * Changes the password for a particular user
+     * @param userid The ID of the user to change the password from
+     * @param newPassword The hash of the new password
+     */
     public void changePassword(int userid, String newPassword){
         Session session = factory.openSession();
         Transaction tx = null;
@@ -119,6 +153,11 @@ public class UserManager {
         }
     }
 
+    /***
+     * Changes the email for a particular user
+     * @param userid The ID of the user to change the email from
+     * @param newEmail The new email
+     */
     public void changeEmail(int userid, String newEmail){
         Session session = factory.openSession();
         Transaction tx = null;

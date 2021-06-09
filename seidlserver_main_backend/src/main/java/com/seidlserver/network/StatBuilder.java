@@ -1,5 +1,7 @@
 package com.seidlserver.network;
 
+import org.springframework.web.bind.annotation.RequestParam;
+
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
@@ -11,6 +13,10 @@ import java.net.URL;
     Date: 20.05.2021
     Time: 12:21
 */
+
+/***
+ * Thread class to asynchronously send requests to the App in order to build the statistics
+ */
 public class StatBuilder implements Runnable{
 
     private static final int DELAY = 60_000*10;
@@ -21,13 +27,13 @@ public class StatBuilder implements Runnable{
             Thread.sleep(25000);
             while(true){
                 //Cpu
-                URL url = new URL("http://localhost/stats/cpu");
+                URL url = new URL(RequestHandler.API+"/stats/cpu");
                 HttpURLConnection con = (HttpURLConnection) url.openConnection();
                 con.setRequestMethod("GET");
                 con.getInputStream();
 
                 //Mem
-                url = new URL("http://localhost/stats/mem");
+                url = new URL(RequestHandler.API+"/stats/mem");
                 con = (HttpURLConnection) url.openConnection();
                 con.setRequestMethod("GET");
                 con.getInputStream();

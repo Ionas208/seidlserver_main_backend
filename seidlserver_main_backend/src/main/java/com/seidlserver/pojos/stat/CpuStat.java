@@ -11,6 +11,10 @@ import java.time.LocalDateTime;
     Date: 06.04.2021
     Time: 11:26
 */
+
+/***
+ * Data Class for CPU load Statistic Entry
+ */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

@@ -15,6 +15,11 @@ import java.util.List;
     Date: 06.04.2021
     Time: 10:15
 */
+
+/***
+ * Data class for Host
+ * Used for extracting data from JSON
+ */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

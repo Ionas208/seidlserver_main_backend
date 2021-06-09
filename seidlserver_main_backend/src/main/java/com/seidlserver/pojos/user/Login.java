@@ -9,6 +9,11 @@ import lombok.NoArgsConstructor;
     Date: 07.04.2021
     Time: 11:15
 */
+
+/***
+ * Data class for the login request
+ * Used for extracting data from JSON
+ */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

@@ -17,6 +17,10 @@ import java.util.List;
     Date: 25.03.2021
     Time: 21:08
 */
+
+/***
+ * Singleton Class for DB actions with the Gameserver
+ */
 public class GameserverManager {
     private static SessionFactory factory;
 
@@ -33,6 +37,11 @@ public class GameserverManager {
         factory = new Configuration().configure().buildSessionFactory();
     }
 
+    /***
+     * Fetches all Gameservers
+     * @return List of all Gameservers
+     * @throws HibernateException
+     */
     public List<Gameserver> getGameservers() throws HibernateException{
         Session session = factory.openSession();
         Transaction tx = null;
@@ -53,6 +62,12 @@ public class GameserverManager {
         return servers;
     }
 
+    /***
+     * Fetches all Gameservers for a particular user, shared or owned
+     * @param userid ID of the user
+     * @return List of all Gameservers for the user
+     * @throws HibernateException
+     */
     public List<Gameserver> getGameserversForUser(Integer userid) throws HibernateException{
         Session session = factory.openSession();
         Transaction tx = null;
@@ -77,6 +92,12 @@ public class GameserverManager {
         return servers;
     }
 
+    /***
+     * Fetches a single Gameserver identified by its ID
+     * @param id The ID of the Gameserver
+     * @return Gameserver
+     * @throws HibernateException
+     */
     public Gameserver getGameserversForId(Integer id) throws HibernateException{
         Session session = factory.openSession();
         Transaction tx = null;
@@ -97,6 +118,11 @@ public class GameserverManager {
 
     }
 
+    /***
+     * Fetches all the different types of gameserver
+     * @return List of all the GameserverTypes
+     * @throws HibernateException
+     */
     public List<GameserverType> getGameserverTypes() throws HibernateException{
         Session session = factory.openSession();
         Transaction tx = null;
@@ -118,6 +144,15 @@ public class GameserverManager {
         return types;
     }
 
+    /***
+     * Adds a gameserver to a user
+     * @param script The script of the Gameserver
+     * @param servername The name of the Gameserver
+     * @param type The type of the Gameserver
+     * @param userid The ID of the user
+     * @return The ID of the new Gameserver
+     * @throws HibernateException
+     */
     public Integer addGameserver(String script, String servername, String type, Integer userid) throws HibernateException{
         Session session = factory.openSession();
         Transaction tx = null;
@@ -141,6 +176,14 @@ public class GameserverManager {
         return id;
     }
 
+    /***
+     * Shares a gameserver with a particular user
+     * @param gameserverid The ID of the Gameserver to be shared
+     * @param serverownerID The ID of the User of the Owner,
+     *                      to check if the server belongs to the user
+     * @param recipientID The ID of the User to be shared to
+     * @throws HibernateException
+     */
     public void shareGameserver(Integer gameserverid, Integer serverownerID, Integer recipientID) throws HibernateException{
         Session session = factory.openSession();
         Transaction tx = null;
@@ -168,6 +211,12 @@ public class GameserverManager {
         }
     }
 
+    /***
+     * Unshares a gameserver from a particular user
+     * @param gameserverid The ID of the gameserver to be unshared from
+     * @param userid The ID fo the user to be unshared from
+     * @throws HibernateException
+     */
     public void unshareGameserver(Integer gameserverid, Integer userid) throws HibernateException{
         Session session = factory.openSession();
         Transaction tx = null;
@@ -191,6 +240,11 @@ public class GameserverManager {
         }
     }
 
+    /***
+     * Removes a particular Gameserver
+     * @param id The ID of the Gameserver to remove
+     * @throws HibernateException
+     */
     public void removeGameserver(Integer id) throws HibernateException{
         Session session = factory.openSession();
         Transaction tx = null;
@@ -210,6 +264,13 @@ public class GameserverManager {
         }
     }
 
+    /***
+     * Removes a Gameserver from a User
+     * @param id The ID of the Gameserver
+     * @param userid The ID of the User of the Owner,
+     *               to check if the server belongs to the user
+     * @throws HibernateException
+     */
     public void removeGameserverFromUser(Integer id, Integer userid) throws HibernateException{
         Session session = factory.openSession();
         Transaction tx = null;

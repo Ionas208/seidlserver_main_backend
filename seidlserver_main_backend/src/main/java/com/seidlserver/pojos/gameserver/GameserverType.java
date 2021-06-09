@@ -11,6 +11,10 @@ import javax.persistence.*;
     Date: 25.03.2021
     Time: 21:06
 */
+/***
+ * Data class for the GameserverType
+ * Mapped to GAMESERVERTYPE Table in DB
+ */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

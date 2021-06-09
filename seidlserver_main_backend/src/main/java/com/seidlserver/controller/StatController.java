@@ -27,12 +27,25 @@ import java.util.Random;
     Date: 06.04.2021
     Time: 09:55
 */
+
+/***
+ * Controller for statistics related requests
+ * Reachable under /stats/
+ */
 @RestController
 @RequestMapping("stats")
 public class StatController {
     private List<CpuStat> cpuStats = new ArrayList<>();
     private List<MemStat> memStats = new ArrayList<>();
 
+    /***
+     * Entrypoint for getting the current load of the CPU
+     * @return ResponseEntity with Code
+     *         200 OK: When the fetching of the load was successful
+     *                 Load included in response body
+     *         500 INTERNAL SERVER ERROR: When there is some other error
+     *                                    Error message is included in the response body
+     */
     @GetMapping(path = "/cpu", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<CpuStat>> cpu(){
         ObjectMapper om = new ObjectMapper();
@@ -48,6 +61,14 @@ public class StatController {
         }
     }
 
+    /***
+     * Entrypoint for getting the current memory usage
+     * @return ResponseEntity with Code
+     *         200 OK: When the fetching of the memory was successful
+     *                 Free memory and Total memory included in response body
+     *         500 INTERNAL SERVER ERROR: When there is some other error
+     *                                    Error message is included in the response body
+     */
     @GetMapping(path = "/mem", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<MemStat>> mem(){
         try {

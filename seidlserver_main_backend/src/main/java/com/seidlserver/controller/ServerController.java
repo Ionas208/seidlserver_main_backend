@@ -17,15 +17,35 @@ import java.net.MalformedURLException;
     Date: 23.03.2021
     Time: 09:54
 */
+
+/***
+ * Controller for server related requests
+ * Reachable under /server/
+ */
 @RestController
 @RequestMapping("server")
 public class ServerController {
 
+    /***
+     * Entrypoint for getting the state of the server (UP, DOWN)
+     * @return ResponseEntity with Code
+     *         200 OK: When fetching of state was successful
+     *                 State included in response body
+     *         500 INTERNAL SERVER ERROR: When there is some other error
+     *                                    Error message is included in the response body
+     */
     @GetMapping(path = "/state", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<State> state(){
         return ResponseEntity.ok(StateHandler.getState());
     }
 
+    /***
+     * Entrypoint for starting the server via WOL
+     * @return ResponseEntity with Code
+     *         200 OK: When sending the Magic Packet was successful
+     *         500 INTERNAL SERVER ERROR: When there is some other error
+     *                                    Error message is included in the response body
+     */
     @PostMapping("/start")
     public ResponseEntity start(){
         try{
@@ -37,6 +57,13 @@ public class ServerController {
         }
     }
 
+    /***
+     * Entrypoint for stopping the server
+     * @return ResponseEntity with Code
+     *         200 OK: When the stopping was successful
+     *         500 INTERNAL SERVER ERROR: When there is some other error
+     *                                    Error message is included in the response body
+     */
     @PostMapping(path = "/stop", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity stop(){
         try {
@@ -49,6 +76,13 @@ public class ServerController {
 
     }
 
+    /***
+     * Entrypoint for restarting the server
+     * @return ResponseEntity with Code
+     *         200 OK: When restarting was successful
+     *         500 INTERNAL SERVER ERROR: When there is some other error
+     *                                    Error message is included in the response body
+     */
     @PostMapping(path = "/restart", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity restart(){
         try {

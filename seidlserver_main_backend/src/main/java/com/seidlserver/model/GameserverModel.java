@@ -9,6 +9,11 @@ import lombok.NoArgsConstructor;
     Date: 12.04.2021
     Time: 17:11
 */
+
+/***
+ * JSON Model Class to be used while adding a new Gameserver
+ * Needed because not all information of a Gameserver can be determined before adding it to the DB
+ */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

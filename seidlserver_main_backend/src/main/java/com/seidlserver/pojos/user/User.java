@@ -20,6 +20,11 @@ import java.util.List;
     Date: 24.03.2021
     Time: 11:12
 */
+
+/***
+ * Data class for the User
+ * Mapped to USER Table in DB
+ */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

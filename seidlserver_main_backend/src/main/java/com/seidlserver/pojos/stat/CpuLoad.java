@@ -10,6 +10,10 @@ import lombok.NoArgsConstructor;
     Date: 06.04.2021
     Time: 10:16
 */
+
+/***
+ * Data Class for CPU Load
+ */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
