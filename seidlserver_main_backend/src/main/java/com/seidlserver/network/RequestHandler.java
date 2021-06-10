@@ -7,7 +7,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.stream.Collectors;
 
@@ -20,11 +19,8 @@ import java.util.stream.Collectors;
 /***
  * Class for sending requests to the API
  */
-//@PropertySource("/application.properties")
 public class RequestHandler {
-    //@Value("${api.url}")
-    //api.url=http://seidlserver.ddns.net:8080
-    public static String API = "http://seidlserver.ddns.net:8080";
+    public static String API = "http://seidlserver.ddns.net:8888/";
 
     /***
      * Sends a request to the API
