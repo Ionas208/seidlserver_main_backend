@@ -1,5 +1,8 @@
 package com.seidlserver.network;
 
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -17,8 +20,11 @@ import java.util.stream.Collectors;
 /***
  * Class for sending requests to the API
  */
+//@PropertySource("/application.properties")
 public class RequestHandler {
-    public static String API = "http://seidlserver.ddns.net:8080/";
+    //@Value("${api.url}")
+    //api.url=http://seidlserver.ddns.net:8080
+    public static String API = "http://seidlserver.ddns.net:8080";
 
     /***
      * Sends a request to the API

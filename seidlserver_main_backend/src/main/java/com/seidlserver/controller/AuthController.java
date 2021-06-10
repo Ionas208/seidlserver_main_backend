@@ -1,6 +1,7 @@
 package com.seidlserver.controller;
 
 import com.seidlserver.db.UserManager;
+import com.seidlserver.model.UserModel;
 import com.seidlserver.pojos.user.User;
 import org.hibernate.HibernateException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,7 +42,7 @@ public class AuthController {
      *                                    Error message is included in the response body
      */
     @PostMapping("/register")
-    public ResponseEntity register(@RequestBody User user){
+    public ResponseEntity register(@RequestBody UserModel user){
         UserManager um = UserManager.getInstance();
         PasswordEncoder encoder = context.getBean("passwordEncoder", PasswordEncoder.class);
         String hash = encoder.encode(user.getPassword());
