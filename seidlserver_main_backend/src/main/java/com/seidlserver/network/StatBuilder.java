@@ -27,13 +27,13 @@ public class StatBuilder implements Runnable{
             Thread.sleep(25000);
             while(true){
                 //Cpu
-                URL url = new URL("http://localhost;8080/stats/cpu");
+                URL url = new URL("http://localhost:8080/stats/cpu");
                 HttpURLConnection con = (HttpURLConnection) url.openConnection();
                 con.setRequestMethod("GET");
                 con.getInputStream();
 
                 //Mem
-                url = new URL("http://localhost;8080/stats/mem");
+                url = new URL("http://localhost:8080/stats/mem");
                 con = (HttpURLConnection) url.openConnection();
                 con.setRequestMethod("GET");
                 con.getInputStream();

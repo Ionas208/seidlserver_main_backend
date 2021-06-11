@@ -10,6 +10,7 @@ import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.query.Query;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /*
@@ -93,12 +94,39 @@ public class GameserverManager {
     }
 
     /***
+     * Fetches all shared Gameservers for a particular user
+     * @param userid ID of the user
+     * @return List of all shared Gameservers for the user
+     * @throws HibernateException
+     */
+    public List<Gameserver> getSharedGameservers(Integer userid) throws HibernateException{
+        Session session = factory.openSession();
+        Transaction tx = null;
+        List<Gameserver> servers = new ArrayList<>();
+        try{
+            tx = session.beginTransaction();
+            User u = session.get(User.class, userid);
+            servers.addAll(u.getSharedGameservers());
+            tx.commit();
+            session.close();
+        }catch(HibernateException ex){
+            ex.printStackTrace();
+            if(tx!=null){
+                tx.rollback();
+            }
+            session.close();
+            throw ex;
+        }
+        return servers;
+    }
+
+    /***
      * Fetches a single Gameserver identified by its ID
      * @param id The ID of the Gameserver
      * @return Gameserver
      * @throws HibernateException
      */
-    public Gameserver getGameserversForId(Integer id) throws HibernateException{
+    public Gameserver getGameserverForId(Integer id) throws HibernateException{
         Session session = factory.openSession();
         Transaction tx = null;
         try{
@@ -225,9 +253,10 @@ public class GameserverManager {
 
             Gameserver g = session.get(Gameserver.class, gameserverid);
             User u = session.get(User.class, userid);
-
+            if(!u.getSharedGameservers().contains(g)){
+                throw new HibernateException("Server does not belong to user.");
+            }
             g.getSharedUsers().remove(u);
-            session.remove(g);
             tx.commit();
             session.close();
         }catch(HibernateException ex){

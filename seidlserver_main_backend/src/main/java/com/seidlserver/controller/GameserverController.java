@@ -16,7 +16,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
-import java.net.MalformedURLException;
+import javax.persistence.PersistenceException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -138,6 +138,7 @@ public class GameserverController {
      * @param email The email of the user to be shared with
      * @return ResponseEntity with Code
      *         200 OK: When the sharing was successful
+     *         400 BAD REQUEST: When the gameserver is already shared with the user
      *         401 UNAUTHORIZED: When the gameserver to share does not belong to the current user
      *         500 INTERNAL SERVER ERROR: When there is some other error
      *                                    Error message is included in the response body
@@ -152,6 +153,37 @@ public class GameserverController {
         try{
             User recipient = um.getUserByEmail(email);
             gm.shareGameserver(serverid, u.getId(), recipient.getId());
+            return ResponseEntity.ok().build();
+        } catch(HibernateException ex){
+            ex.printStackTrace();
+            return new ResponseEntity(ex.getMessage(), HttpStatus.UNAUTHORIZED);
+        }
+        catch(PersistenceException ex){
+            ex.printStackTrace();
+            return new ResponseEntity("Server is already shared with user.", HttpStatus.BAD_REQUEST);
+        }
+        catch(Exception ex){
+            ex.printStackTrace();
+            return new ResponseEntity(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    /***
+     * Entrypoint for unsharing a gameserver from the current user
+     * @param serverid The ID of the server to share
+     * @return ResponseEntity with Code
+     *         200 OK: When the unsharing was successful
+     *         401 UNAUTHORIZED: When the gameserver to unshare is not shared with the user
+     *         500 INTERNAL SERVER ERROR: When there is some other error
+     *                                    Error message is included in the response body
+     */
+    @PostMapping(value = "/unshare", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity unshare(
+            @RequestParam(name = "serverid") Integer serverid
+    ){
+        User u = getUser();
+        try{
+            gm.unshareGameserver(serverid, u.getId());
             return ResponseEntity.ok().build();
         } catch(HibernateException ex){
             ex.printStackTrace();
@@ -176,7 +208,7 @@ public class GameserverController {
     @PostMapping("/start")
     public ResponseEntity start(@RequestParam(name = "id", defaultValue = "-1") Integer id){
         User u = getUser();
-        Gameserver g = gm.getGameserversForId(id);
+        Gameserver g = gm.getGameserverForId(id);
         if(g == null){
             return new ResponseEntity("Gameserver with ID "+id+" does not exist", HttpStatus.BAD_REQUEST);
         }
@@ -205,7 +237,7 @@ public class GameserverController {
     @PostMapping("/stop")
     public ResponseEntity stop(@RequestParam(name = "id", defaultValue = "-1") Integer id){
         User u = getUser();
-        Gameserver g = gm.getGameserversForId(id);
+        Gameserver g = gm.getGameserverForId(id);
         if(g == null){
             return new ResponseEntity("Gameserver with ID "+id+" does not exist", HttpStatus.BAD_REQUEST);
         }
@@ -236,7 +268,7 @@ public class GameserverController {
     public ResponseEntity<String> state(@RequestParam(name = "id", defaultValue = "-1") Integer id){
         try {
             User u = getUser();
-            Gameserver g = gm.getGameserversForId(id);
+            Gameserver g = gm.getGameserverForId(id);
             if(g == null){
                 return new ResponseEntity("Gameserver with ID "+id+" does not exist", HttpStatus.BAD_REQUEST);
             }
