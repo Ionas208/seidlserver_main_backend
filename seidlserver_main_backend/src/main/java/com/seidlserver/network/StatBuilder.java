@@ -27,7 +27,7 @@ public class StatBuilder implements Runnable{
             Thread.sleep(25000);
             while(true){
                 //Cpu
-                URL url = new URL(RequestHandler.API+"/stats/cpu");
+                URL url = new URL(RequestHandler.API+"stats/cpu");
                 HttpURLConnection con = (HttpURLConnection) url.openConnection();
                 con.setRequestMethod("GET");
                 con.getInputStream();
