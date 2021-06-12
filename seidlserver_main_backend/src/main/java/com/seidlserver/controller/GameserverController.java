@@ -212,7 +212,7 @@ public class GameserverController {
         if(g == null){
             return new ResponseEntity("Gameserver with ID "+id+" does not exist", HttpStatus.BAD_REQUEST);
         }
-        if(!(g.getOwner().getId() == u.getId())){
+        if(!gm.isAccessibleTo(id, u.getId())){
             return new ResponseEntity("Gameserver with ID "+id+" is not accessible to user " + getUser().getEmail(), HttpStatus.UNAUTHORIZED);
         }
         try {
@@ -241,7 +241,7 @@ public class GameserverController {
         if(g == null){
             return new ResponseEntity("Gameserver with ID "+id+" does not exist", HttpStatus.BAD_REQUEST);
         }
-        if(!(g.getOwner().getId() == u.getId())){
+        if(!gm.isAccessibleTo(id, u.getId())){
             return new ResponseEntity("Gameserver with ID "+id+" is not accessible to user " + getUser().getEmail(), HttpStatus.UNAUTHORIZED);
         }
         try {
@@ -272,7 +272,7 @@ public class GameserverController {
             if(g == null){
                 return new ResponseEntity("Gameserver with ID "+id+" does not exist", HttpStatus.BAD_REQUEST);
             }
-            if(!(g.getOwner().getId() == u.getId())){
+            if(!gm.isAccessibleTo(id, u.getId())){
                 return new ResponseEntity("Gameserver with ID "+id+" is not accessible to user " + getUser().getEmail(), HttpStatus.UNAUTHORIZED);
             }
             String state = RequestHandler.sendRequest("gameserver/state?linuxuser="+g.getLinuxuser()+"&script="+g.getType().getScript(), "GET", true);

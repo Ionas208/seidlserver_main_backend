@@ -323,4 +323,35 @@ public class GameserverManager {
             throw ex;
         }
     }
+
+    /***
+     * Checks if gameserver is accessible to user
+     * @param gameserverid The ID of the gameserver
+     * @param userid The ID of the user in question
+     * @return boolean
+     */
+    public boolean isAccessibleTo(Integer gameserverid, Integer userid){
+        Session session = factory.openSession();
+        Transaction tx = null;
+        try{
+            tx = session.beginTransaction();
+            Gameserver g = session.get(Gameserver.class, gameserverid);
+            User u = session.get(User.class, userid);
+            if(g.getOwner() == u || g.getSharedUsers().contains(u)){
+                session.close();
+                return true;
+            }
+            else{
+                session.close();
+                return false;
+            }
+        }catch(HibernateException ex){
+            ex.printStackTrace();
+            if(tx!=null){
+                tx.rollback();
+            }
+            session.close();
+            throw ex;
+        }
+    }
 }
