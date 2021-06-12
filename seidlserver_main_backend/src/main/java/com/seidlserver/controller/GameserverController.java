@@ -18,7 +18,9 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.PersistenceException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /*
     Created by: Jonas Seidl
@@ -49,6 +51,8 @@ public class GameserverController {
         User u = getUser();
         try{
             List<Gameserver> servers = gm.getGameserversForUser(u.getId());
+            Set<Gameserver> temp = new HashSet<>(servers);
+            servers = new ArrayList<>(temp);
             List<GameserverResponseModel> response = new ArrayList<>();
             for (Gameserver g: servers) {
                 response.add(new GameserverResponseModel(g.getId(), g.getLinuxuser(), g.getServername(), g.getType(), g.getOwner().getEmail()));
