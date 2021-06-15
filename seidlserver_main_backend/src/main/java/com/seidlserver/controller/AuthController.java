@@ -37,6 +37,7 @@ public class AuthController {
      * @param user Json Model in the Request Body for the new user
      * @return ResponseEntity with Code
      *         200 OK: When register was successful
+     *         400 BAD REQUEST: When there is missing data
      *         409 CONFLICT: When there is a duplicate email
      *         500 INTERNAL SERVER ERROR: When there is some other error
      *                                    Error message is included in the response body
@@ -44,10 +45,15 @@ public class AuthController {
     @PostMapping("/register")
     public ResponseEntity register(@RequestBody UserModel user){
         UserManager um = UserManager.getInstance();
+
+        if(user.getEmail().equals("") || user.getPassword().equals("") || user.getFirst_name().equals("") || user.getLast_name().equals("")){
+            return new ResponseEntity("All fields must not be empty.", HttpStatus.BAD_REQUEST);
+        }
+
         PasswordEncoder encoder = context.getBean("passwordEncoder", PasswordEncoder.class);
         String hash = encoder.encode(user.getPassword());
         try{
-            um.addUser(user.getFirst_name(), user.getLast_name(), user.getEmail(), hash);
+            um.addUser(user.getFirst_name(), user.getLast_name(), user.getEmail().replace(" ",""), hash);
             return ResponseEntity.ok().build();
         } catch(HibernateException e){
             return new ResponseEntity(e.getMessage(), HttpStatus.CONFLICT);
