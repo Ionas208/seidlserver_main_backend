@@ -49,7 +49,11 @@ public class ServerController {
     @PostMapping("/start")
     public ResponseEntity start(){
         try{
-            WakeOnLan.wake();
+            for(int i = 0; i<20; i++){
+                WakeOnLan.wake();
+                System.out.println("wake");
+                Thread.sleep(50);
+            }
             return ResponseEntity.ok().build();
         }catch(Exception ex){
             ex.printStackTrace();
