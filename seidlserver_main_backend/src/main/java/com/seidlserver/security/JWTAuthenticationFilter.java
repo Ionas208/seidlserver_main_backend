@@ -55,6 +55,9 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
             throws AuthenticationException {
         try{
             User creds = new ObjectMapper().readValue(request.getInputStream(), User.class);
+            if(creds.getEmail().equals("") || creds.getPassword().equals("")){
+                return null;
+            }
             UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
                     creds.getUsername(),
                     creds.getPassword(),
